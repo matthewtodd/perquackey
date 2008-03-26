@@ -1,0 +1,7 @@
+require 'perquackey/array'
+require 'perquackey/dictionary'
+require 'perquackey/fast_dictionary'
+require 'perquackey/filter'
+require 'perquackey/game'
+require 'perquackey/string'
+require 'perquackey/word_table'

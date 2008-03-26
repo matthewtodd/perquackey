@@ -1,0 +1,19 @@
+<html>
+
+<head>
+  <title>Perquackey</title>
+</head>
+
+<body>
+  <h1>Perquackey</h1>
+  
+  <form action="<%= words_path %>" method="post">
+    <input name="letters" value="<%= @letters %>" />
+  </form>
+  
+  <%= yield %>
+  
+  <p>Thanks to Mendel Cooper and Alan Beale for the <a href="http://personal.riverusers.com/~thegrendel/software.html">YAWL word list</a>.
+</body>
+
+</html>

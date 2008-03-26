@@ -1,0 +1,26 @@
+Write a c-version of String#spell? -- or even Dictionary#words based on this algorithm from YAWL:
+
+  Boolean isanagram( char *letterset, char *word )
+  {
+  	Boolean error_flag = TRUE;
+  	static char dup_lset[ MAXLEN ];
+  	register char *letpos;
+
+  	 strcpy( dup_lset, letterset );
+           strcat( dup_lset, "\n" );
+
+  		while( *word )
+  			{
+  			if( ( letpos  = strchr( dup_lset, *word++ ) ) != NULL )
+  				*letpos = XOUT;
+        else
+           if( ( letpos = strchr( dup_lset, WILDCARD ) ) != NULL ) 
+              *letpos = XOUT;
+
+  			else
+  				{ error_flag = FALSE; break; }
+  			}
+
+  		return( error_flag );
+  }
+

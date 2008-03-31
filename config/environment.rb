@@ -64,6 +64,8 @@ end
 # Mime::Type.register "application/x-mobile", :mobile
 
 # Include your application configuration below
+ENV['INLINEDIR'] = File.join(RAILS_ROOT, 'tmp')
+
 Dir[File.join(RAILS_ROOT, 'vendor', 'gems', '**', 'lib')].each do |lib|
   $:.unshift lib
 end

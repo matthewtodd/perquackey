@@ -1,18 +1,19 @@
-require 'capistrano/ext/textdrive'
-
 set :application, 'perquackey'
-set :domain,      'matthewtodd.org'
-set :repository,  'http://matthewtodd.org/svn/public/perquackey'
+set :repository,  'http://git.matthewtodd.org/perquackey.git'
 
-task :after_setup do
-  create_application_directories
-  create_application_startup_script
-  configure_reboot
-  configure_apache
-  configure_lighttpd
-  restart_lighttpd
-end
+# If you aren't deploying to /u/apps/#{application} on the target
+# servers (which is the default), you can specify the actual location
+# via the :deploy_to variable:
+set :deploy_to, '/users/home/matthew/domains/perquackey.matthewtodd.org/var/www'
 
-task :after_update_code do
-  symlink_tmp_sockets
-end
+# If you aren't using Subversion to manage your source code, specify
+# your SCM below:
+set :scm, :git
+set :scm_command, '/usr/local/bin/git'
+
+role :app, 'woodward.joyent.us', :user => 'matthew'
+role :web, 'woodward.joyent.us', :user => 'matthew'
+role :db,  'woodward.joyent.us', :user => 'matthew', :primary => true
+
+set :runner, 'matthew'
+set :run_method, :run

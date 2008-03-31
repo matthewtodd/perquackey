@@ -1,0 +1,2 @@
+#!/bin/sh
+/users/home/matthew/domains/perquackey.matthewtodd.org/var/www/current/script/process/spawner -p 4004 -i 1

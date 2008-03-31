@@ -17,3 +17,4 @@ role :db,  'woodward.joyent.us', :user => 'matthew', :primary => true
 
 set :runner, 'matthew'
 set :run_method, :run
+set :group_writable, false

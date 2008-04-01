@@ -1,20 +1,19 @@
+# In all its glory:
 set :application, 'perquackey'
-set :repository,  '/users/home/matthew/domains/git.matthewtodd.org/var/lib/repos/perquackey.git'
 
-# If you aren't deploying to /u/apps/#{application} on the target
-# servers (which is the default), you can specify the actual location
-# via the :deploy_to variable:
-set :deploy_to, '/users/home/matthew/domains/perquackey.matthewtodd.org/var/www'
+# Gotta love this new way of writing it.
+server 'woodward.joyent.us', :web, :app, :user => 'matthew'
 
-# If you aren't using Subversion to manage your source code, specify
-# your SCM below:
+# Git rawks, yo!
 set :scm, :git
+set :repository, '/users/home/matthew/domains/git.matthewtodd.org/var/lib/repos/perquackey.git'
 set :git_shallow_clone, 1
 
-role :app, 'woodward.joyent.us', :user => 'matthew'
-role :web, 'woodward.joyent.us', :user => 'matthew'
-role :db,  'woodward.joyent.us', :user => 'matthew', :primary => true
+# I'm liking the /var these days
+set :deploy_to, '/users/home/matthew/domains/perquackey.matthewtodd.org/var/www'
 
-set :runner, 'matthew'
-set :run_method, :run
+# RubyInline wisely refuses to run in directories that are group_writable.
 set :group_writable, false
+
+# Just me, no fancy app user or anything line that.
+set :use_sudo, false

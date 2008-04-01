@@ -1,2 +1,1 @@
-* TODO Switch config/deploy.rb to use ssh-based git repository, setting :git_shallow_clone to 1
-* TODO Set up a .htaccess, changing server's DocumentRoot and disabling whole-hog proxying
+* TODO Set up an .htaccess, changing server's DocumentRoot and disabling whole-hog proxying

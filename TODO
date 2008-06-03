@@ -1,1 +1,1 @@
-* TODO Set up an .htaccess, changing server's DocumentRoot and disabling whole-hog proxying
+* TODO Do something line ENV['INLINEDIR'] = File.join(RAILS_ROOT, 'tmp') for Camping.

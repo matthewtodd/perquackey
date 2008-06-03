@@ -1,7 +1,3 @@
 #!/usr/bin/env ruby
-require File.join(File.dirname(__FILE__), '..', 'config', 'boot')
-
-libs =  " -r #{RAILS_ROOT}/config/environment"
-libs << " -r #{RAILS_ROOT}/lib/perquackey/console"
-
-exec "irb #{libs} --simple-prompt"
+LIB_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+exec "irb -I#{LIB_DIR} -r perquackey/console --simple-prompt"

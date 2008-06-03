@@ -31,7 +31,7 @@ module Perquackey::Views
         form(:name => 'form', :action => R(Index), :method => 'post') { input :name => 'letters', :value => @letters }
         script(:type => 'text/javascript') { 'document.formas.form.letters.focus();' }
         self << yield
-        p { 'Thanks to .. for the ' + a('YAWL Word List', :href => '') + '.' }
+        p { 'Thanks to Mendel Cooper and Alan Beale for the ' + a('YAWL Word List', :href => 'http://personal.riverusers.com/~thegrendel/software.html') + '.' }
       end
     end
   end

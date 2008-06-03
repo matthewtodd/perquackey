@@ -1,7 +1,7 @@
 class WordTable
   include Enumerable
   
-  def initialize(list)
+  def initialize(list=[])
     @table = Hash.new { |h, k| h[k] = [] }
 
     list.each do |word|

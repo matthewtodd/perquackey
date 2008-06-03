@@ -1,4 +1,5 @@
-$:.unshift File.join(File.dirname(__FILE__), '..', 'vendor')
+require 'rubygems'
+require 'inline'
 
 require 'perquackey/dictionary'
 require 'perquackey/game'

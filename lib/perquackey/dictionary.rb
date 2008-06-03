@@ -1,5 +1,3 @@
-require 'inline'
-
 class Dictionary
   YAWL = File.join(File.dirname(__FILE__), '..', '..', 'resources', 'yawl-0.3.2-word.list')
   

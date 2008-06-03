@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '..', 'test_helper')
+require File.join(File.dirname(__FILE__), 'test_helper')
 
 class WordTableTest < Test::Unit::TestCase
   def test_handles_empty_list

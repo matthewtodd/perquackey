@@ -1,10 +1,10 @@
-class Game
+class Perquackey::Game
   def initialize
-    @dictionary = Dictionary.new
+    @dictionary = Perquackey::Dictionary.new
   end
   
   def words(letters)
-    WordTable.new(@dictionary.words(letters).reject { |word| word.length < minimum_length(letters) })
+    Perquackey::WordTable.new(@dictionary.words(letters).reject { |word| word.length < minimum_length(letters) })
   end
   
   private

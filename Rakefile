@@ -1,9 +1,12 @@
 require 'rubygems'
 require 'rake/gemreleasetask'
 
+$:.unshift File.join(File.dirname(__FILE__), 'lib')
+require 'perquackey'
+
 spec = Gem::Specification.new do |spec| 
   spec.name             = 'perquackey'
-  spec.version          = '0.2.0'
+  spec.version          = Perquackey::VERSION
   spec.summary          = ''
   spec.files            = FileList['README', 'CHANGELOG', 'TODO', 'bin/*', 'lib/**/*.rb', 'resources/*'].to_a
   spec.executables      = ['perquackey']

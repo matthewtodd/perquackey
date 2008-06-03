@@ -1,8 +1,8 @@
-class Dictionary
+class Perquackey::Dictionary
   YAWL = File.join(File.dirname(__FILE__), '..', '..', 'resources', 'yawl-0.3.2-word.list')
   
   def words(letters)
-    c_words(letters, Dictionary::YAWL)
+    c_words(letters, YAWL)
   end
   
   # After finding YAWL, I pretty much lifted this algorithm straight from its

@@ -1,4 +1,4 @@
-class WordTable
+class Perquackey::WordTable
   include Enumerable
   
   def initialize(list=[])

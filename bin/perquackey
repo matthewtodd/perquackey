@@ -1,3 +1,37 @@
 #!/usr/bin/env ruby
+%w(optparse ostruct rubygems).each { |lib| require lib }
+
+conf = OpenStruct.new(:mode => :console, :port => 3000)
+
+opts = OptionParser.new do |opts|
+  opts.banner = "Usage: #{File.basename($0)} [--server [--port PORT]]"
+  opts.separator ""
+  opts.on("-s", "--server", "Run as a web server") { conf.mode = :server }
+  opts.on("-p", "--port NUM", "Port for web server (defaults to #{conf.port})") { |port| conf.port = port }
+  opts.on("-h", "--help", "Show this message") { puts opts; exit }
+  opts.separator ""
+end
+
+opts.parse! ARGV
+
 LIB_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
-exec "irb -I#{LIB_DIR} -r perquackey/console --simple-prompt"
+$:.unshift LIB_DIR
+
+case conf.mode
+when :console
+  exec "irb -I#{LIB_DIR} -r perquackey/console --simple-prompt"
+when :server
+  require 'mongrel/camping'
+  require 'perquackey/server'
+
+  config = Mongrel::Configurator.new :host => '0.0.0.0' do
+    listener :port => conf.port do
+      uri '/', :handler => Mongrel::Camping::CampingHandler.new(Perquackey)
+      trap("INT") { stop }
+      run
+    end
+  end
+
+  puts "** Perquackey is running at http://localhost:#{conf.port}"
+  config.join
+end

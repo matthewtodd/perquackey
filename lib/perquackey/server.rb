@@ -29,7 +29,7 @@ module Perquackey::Views
       body do
         h1 'Perquackey'
         form(:name => 'form', :action => R(Index), :method => 'post') { input :name => 'letters', :value => @letters }
-        script(:type => 'text/javascript') { 'document.formas.form.letters.focus();' }
+        script(:type => 'text/javascript') { 'document.forms.form.letters.focus();' }
         self << yield
         p { 'Thanks to Mendel Cooper and Alan Beale for the ' + a('YAWL Word List', :href => 'http://personal.riverusers.com/~thegrendel/software.html') + '.' }
       end

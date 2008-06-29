@@ -1,3 +1,7 @@
-== 0.1.0 -- 2008-06-03
+== 0.3.0 -- 2008-06-29
+
+* Support command-line lookup in addition to irb console.
+
+== 0.2.0 -- 2008-06-03
 
 * Birthday!

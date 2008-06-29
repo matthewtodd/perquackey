@@ -2,13 +2,14 @@
 require 'optparse'
 require 'ostruct'
 
-conf = OpenStruct.new(:mode => :console, :port => 3000)
+conf = OpenStruct.new(:mode => :stdout, :port => 3000)
 
 opts = OptionParser.new do |opts|
-  opts.banner = "Usage: #{File.basename($0)} [--server [--port PORT]]"
+  opts.banner = "Usage: #{File.basename($0)} [options] <word>"
   opts.separator ''
+  opts.on('-c', '--console', 'Run as an interactve console') { conf.mode = :console }
   opts.on('-s', '--server', 'Run as a web server') { conf.mode = :server }
-  opts.on('-p', '--port NUM', "Port for web server (defaults to #{conf.port})") { |port| conf.port = port }
+  opts.on('-p', '--port PORT', "Port for web server (defaults to #{conf.port})") { |port| conf.port = port }
   opts.on('-h', '--help', 'Show this message') { puts opts; exit }
   opts.separator ''
 end
@@ -19,6 +20,9 @@ LIB_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
 $:.unshift LIB_DIR
 
 case conf.mode
+when :stdout
+  require 'perquackey'
+  Perquackey::Game.new.words(ARGV.shift).each { |row| puts row.join(' ') }
 when :console
   exec "irb -I#{LIB_DIR} -r perquackey/console --simple-prompt"
 when :server

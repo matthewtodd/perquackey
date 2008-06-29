@@ -1,6 +1,6 @@
 class Perquackey::WordTable
   include Enumerable
-  
+
   def initialize(list=[])
     @table = Hash.new { |h, k| h[k] = [] }
 

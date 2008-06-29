@@ -8,12 +8,12 @@ module Perquackey::Controllers
       @letters, @table = '', WordTable.new
       render :letters
     end
-    
+
     def post
       redirect Letters, input.letters
     end
   end
-  
+
   class Letters < R '/([a-z]+)'
     def get(letters)
       @letters, @table = letters, Game.new.words(letters)
@@ -35,11 +35,11 @@ module Perquackey::Views
       end
     end
   end
-  
+
   def letters
     table do
       tr { @table.headers.each { |header| th header } }
-      
+
       @table.each do |row|
         tr { row.each { |word| td word } }
       end

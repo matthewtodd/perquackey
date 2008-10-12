@@ -1,7 +1,11 @@
-== 0.3.0 -- 2008-06-29
+== 0.3.2 -- 2008-10-12
+* BUGFIX Needed to define Perquackey module.
 
+== 0.3.1 -- 2008-10-10
+* Packaged for GitHub auto-gemification.
+
+== 0.3.0 -- 2008-06-29
 * Support command-line lookup in addition to irb console.
 
 == 0.2.0 -- 2008-06-03
-
 * Birthday!

@@ -1,6 +1,7 @@
 == 0.3.3 -- 2009-04-18
 * Removed mongrel dependency.
 * Switched console to use readline instead of irb.
+* Remove stdout usage. Console is the default.
 
 == 0.3.2 -- 2008-10-12
 * BUGFIX Needed to define Perquackey module.

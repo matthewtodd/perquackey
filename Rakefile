@@ -2,7 +2,7 @@ require 'rubygems'
 
 spec = Gem::Specification.new do |spec|
   spec.name             = 'perquackey'
-  spec.version          = '0.3.2'
+  spec.version          = '0.4.0'
   spec.summary          = 'Provides console session and Camping webapp for looking up Perquackey word matches'
   spec.files            = FileList['README', 'CHANGELOG', 'TODO', 'bin/*', 'lib/**/*.rb', 'resources/*'].to_a
   spec.executables      = ['perquackey']

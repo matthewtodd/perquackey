@@ -24,7 +24,7 @@ when :stdout
   require 'perquackey'
   Perquackey::Game.new.words(ARGV.shift).each { |row| puts row.join(' ') }
 when :console
-  exec "irb -I#{LIB_DIR} -r perquackey/console --simple-prompt"
+  require 'perquackey/console'
 when :server
   require 'webrick'
   require 'rubygems'

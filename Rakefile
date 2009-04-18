@@ -3,7 +3,7 @@ require 'rubygems'
 spec = Gem::Specification.new do |spec|
   spec.name             = 'perquackey'
   spec.version          = '0.3.2'
-  spec.summary          = 'Provides irb console session and Camping webapp for looking up Perquackey word matches'
+  spec.summary          = 'Provides console session and Camping webapp for looking up Perquackey word matches'
   spec.files            = FileList['README', 'CHANGELOG', 'TODO', 'bin/*', 'lib/**/*.rb', 'resources/*'].to_a
   spec.executables      = ['perquackey']
   spec.has_rdoc         = true

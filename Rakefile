@@ -14,7 +14,6 @@ spec = Gem::Specification.new do |spec|
 
   spec.add_dependency     'RubyInline'
   spec.add_dependency     'camping'
-  spec.add_dependency     'mongrel'
 end
 
 desc 'Generate a gemspec file'

@@ -26,18 +26,12 @@ when :stdout
 when :console
   exec "irb -I#{LIB_DIR} -r perquackey/console --simple-prompt"
 when :server
+  require 'webrick'
   require 'rubygems'
-  require 'mongrel/camping'
+  require 'camping/webrick'
   require 'perquackey/server'
-
-  config = Mongrel::Configurator.new :host => '0.0.0.0' do
-    listener :port => conf.port do
-      uri '/', :handler => Mongrel::Camping::CampingHandler.new(Perquackey)
-      trap('INT') { stop }
-      run
-    end
-  end
-
-  puts "** Perquackey is running at http://localhost:#{conf.port}"
-  config.join
+  server = WEBrick::HTTPServer.new(:Port => conf.port)
+  server.mount '/', WEBrick::CampingHandler, Perquackey
+  trap(:INT) { server.shutdown }
+  server.start
 end

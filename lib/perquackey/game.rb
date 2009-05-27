@@ -1,6 +1,8 @@
 class Perquackey::Game
+  YAWL = File.join(File.dirname(__FILE__), '..', '..', 'resources', 'yawl-0.3.2-word.list')
+
   def initialize
-    @dictionary = Perquackey::Dictionary.new
+    @dictionary = Perquackey::Dictionary.new(YAWL)
   end
 
   def words(letters)

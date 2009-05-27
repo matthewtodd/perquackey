@@ -15,8 +15,9 @@ end
 
 opts.parse! ARGV
 
-LIB_DIR = File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
-$:.unshift LIB_DIR
+%w(ext lib).each do |dir|
+  $:.unshift File.expand_path(File.join(File.dirname(__FILE__), '..', dir))
+end
 
 case conf.mode
 when :console

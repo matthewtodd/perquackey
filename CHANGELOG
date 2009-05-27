@@ -1,3 +1,6 @@
+== 0.5.1 -- 2009-05-27
+* BUGFIX dictionary bundle should go in perquackey subdir.
+
 == 0.5.0 -- 2009-05-27
 * Removed dependency on RubyInline. (So I can deploy to Heroku.)
 

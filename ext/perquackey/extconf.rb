@@ -1,2 +1,2 @@
 require 'mkmf'
-create_makefile 'dictionary'
+create_makefile 'perquackey/dictionary'

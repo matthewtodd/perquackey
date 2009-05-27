@@ -3,7 +3,7 @@ require 'rake/testtask'
 
 spec = Gem::Specification.new do |spec|
   spec.name             = 'perquackey'
-  spec.version          = '0.5.0'
+  spec.version          = '0.5.1'
   spec.summary          = 'Provides console session and Camping webapp for looking up Perquackey word matches'
   spec.files            = FileList['README', 'CHANGELOG', 'TODO', 'bin/*', 'ext/**/*.c', 'ext/**/*.rb', 'lib/**/*.rb', 'resources/*'].to_a
   spec.executables      = ['perquackey']

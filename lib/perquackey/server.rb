@@ -1,4 +1,4 @@
-%w(rubygems camping perquackey).each { |lib| require lib }
+require 'perquackey'
 
 Camping.goes :Perquackey
 

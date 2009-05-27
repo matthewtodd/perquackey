@@ -1,2 +1,3 @@
-* remove dependency on RubyInline?
+* Dictionary should take some kind of IO object.
+* Server script should just use Rack.
 * tabtab_definitions --> except tabtab's not working well with -- options.

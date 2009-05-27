@@ -18,7 +18,7 @@ end
 
 desc 'Remove generated artifacts'
 task :clean do
-  FileList['ext/**/Makefile', 'ext/**/*.bundle', 'ext/**/*.o'].each { |file| rm file }
+  FileList['*.gem', 'ext/**/Makefile', 'ext/**/*.bundle', 'ext/**/*.o'].each { |file| rm file }
 end
 
 desc 'Generate a gemspec file'

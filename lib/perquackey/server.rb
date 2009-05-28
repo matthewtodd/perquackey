@@ -1,4 +1,5 @@
 require 'perquackey'
+require 'camping'
 
 Camping.goes :Perquackey
 

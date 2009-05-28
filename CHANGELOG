@@ -1,3 +1,6 @@
+== 0.5.2 -- 2009-05-28
+* BUGFIX still need to require camping.
+
 == 0.5.1 -- 2009-05-27
 * BUGFIX dictionary bundle should go in perquackey subdir.
 

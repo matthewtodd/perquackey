@@ -26,7 +26,7 @@ end
 module Perquackey::Views
   def layout
     html do
-      head { title 'Perquackey' }
+      head { title @letters.blank? ? 'Perquackey' : "Perquackey: #{@letters}" }
       body do
         h1 'Perquackey'
         form(:name => 'form', :action => R(Index), :method => 'post') { input :name => 'letters', :value => @letters }

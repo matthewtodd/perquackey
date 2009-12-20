@@ -1,3 +1,10 @@
 * Dictionary should take some kind of IO object.
-* Server script should just use Rack.
-* tabtab_definitions --> except tabtab's not working well with -- options.
+* Server script should just use Rack, or maybe Sinatra.
+* Use shoe to manage the Rakefile. (Push a release to gemcutter.)
+* Use the web interface for in-game support:
+  * Capture words
+  * Calculate score
+  * Show available words iteratively, as letters become known
+  * Show a countdown timer?!
+  * Link words to (onelook.com)
+  * Drag words ending in s left (or some other macro support for doing that)

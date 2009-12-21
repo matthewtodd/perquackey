@@ -1,3 +1,6 @@
+== Git
+* Change build system to use shoe.
+
 == 0.5.2 -- 2009-05-28
 * BUGFIX still need to require camping.
 

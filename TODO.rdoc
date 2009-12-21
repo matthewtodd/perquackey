@@ -1,6 +1,7 @@
 * Dictionary should take some kind of IO object.
 * Server script should just use Rack, or maybe Sinatra.
-* Use shoe to manage the Rakefile. (Push a release to gemcutter.)
+* Include the C extension in the rdoc.
+* Push a release to gemcutter.
 * Use the web interface for in-game support:
   * Capture words
   * Calculate score

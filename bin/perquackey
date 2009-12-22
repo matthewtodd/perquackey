@@ -15,10 +15,6 @@ end
 
 opts.parse! ARGV
 
-%w(ext lib).each do |dir|
-  $:.unshift File.expand_path(File.join(File.dirname(__FILE__), '..', dir))
-end
-
 case conf.mode
 when :console
   require 'perquackey/console'

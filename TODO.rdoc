@@ -1,5 +1,4 @@
 * Dictionary should take some kind of IO object.
-* Server script should just use Rack, or maybe Sinatra.
 * Include the C extension in the rdoc.
 * Push a release to gemcutter.
 * Use the web interface for in-game support:

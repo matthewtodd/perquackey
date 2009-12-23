@@ -1,11 +1,11 @@
 <table>
   <tr>
-    <% @table.headers.each do |header| %>
+    <% table.headers.each do |header| %>
       <th><%= header %></th>
     <% end %>
   </tr>
 
-  <% @table.each do |row| %>
+  <% table.each do |row| %>
     <tr>
       <% row.each do |word| %>
         <td><%= word %></td>

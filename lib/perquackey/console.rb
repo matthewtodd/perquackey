@@ -1,19 +1,43 @@
 require 'perquackey'
 require 'readline'
 
-puts 'Type ctrl-d or quit to exit.'
+module Perquackey
+  class Console
+    def self.run!
+      new.run
+    end
 
-game = Perquackey::Game.new
+    def initialize
+      @game = Perquackey::Game.new
+    end
 
-loop do
-  line = Readline::readline('> ') || 'quit'
-  next if line.strip == ''
-  Readline::HISTORY.push(line)
+    def run
+      puts 'Type ctrl-d or quit to exit.'
 
-  if line == 'quit'
-    puts 'Goodbye.'
-    exit
-  else
-    game.words(line).each { |row| puts row.join(' ') }
+      loop do
+        letters = prompt_for_letters
+
+        case letters
+        when nil, 'quit'
+          puts 'Goodbye.'
+          exit
+        when /^[a-z]+$/
+          Readline::HISTORY.push(letters)
+          puts words(letters)
+        else
+          next
+        end
+      end
+    end
+
+    private
+
+    def prompt_for_letters
+      Readline::readline('> ')
+    end
+
+    def words(letters)
+      @game.words(letters).map { |row| row.join(' ') }
+    end
   end
 end

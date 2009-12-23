@@ -1,4 +1,10 @@
 #!/usr/bin/env ruby
+#
+# To run this script in-project (rather than via rubygems wrapper), you'll
+# need to say something like:
+#
+#   RUBYOPT=rubygems RUBYLIB=ext:lib ./bin/perquackey
+#
 require 'optparse'
 require 'ostruct'
 
@@ -18,6 +24,7 @@ opts.parse! ARGV
 case conf.mode
 when :console
   require 'perquackey/console'
+  Perquackey::Console.run!
 when :server
   require 'perquackey/server'
   Perquackey::Server.run!(:port => conf.port)

@@ -6,7 +6,7 @@ module Perquackey
     set :views, File.dirname(__FILE__) + '/server'
 
     get %r{^/([a-z]{0,13})$} do |letters|
-      erb :letters, :locals => { :letters => letters, :table => Game.new.words(letters) }
+      erb :index, :locals => { :letters => letters, :words => Game.new.words(letters) }
     end
 
     post '/' do

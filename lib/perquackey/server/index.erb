@@ -1,0 +1,23 @@
+<form name="form" action="/" method="post">
+  <input name="letters" value="<%= letters %>" autocomplete="off">
+</form>
+
+<script type="text/javascript">
+  document.forms.form.letters.focus();
+</script>
+
+<table>
+  <tr>
+    <% words.headers.each do |header| %>
+      <th><%= header %></th>
+    <% end %>
+  </tr>
+
+  <% words.each do |row| %>
+    <tr>
+      <% row.each do |word| %>
+        <td><%= word %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

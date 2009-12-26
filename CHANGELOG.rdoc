@@ -1,4 +1,4 @@
-== Git
+== 0.6.0 -- 2009-12-16
 * Switch from Camping to Sinatra.
 * Change build system to use Shoe.
 

@@ -1,4 +1,4 @@
-require 'perquackey/version'
+require 'perquackey'
 require 'shoe'
 
 Shoe.tie('perquackey', Perquackey::VERSION, 'Provides console session and simple webapp for looking up Perquackey word matches') do |spec|

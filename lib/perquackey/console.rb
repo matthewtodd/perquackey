@@ -7,7 +7,7 @@ module Perquackey
     end
 
     def initialize
-      @game = Perquackey::Game.new
+      @game = Game.new
     end
 
     def run

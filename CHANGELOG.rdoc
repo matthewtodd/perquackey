@@ -1,3 +1,7 @@
+== 0.7.0 -- 2010-03-30
+* Switch from YAWL to TWL06 word list.
+* Upgrade build system to use Bundler.
+
 == 0.6.0 -- 2009-12-16
 * Switch from Camping to Sinatra.
 * Change build system to use Shoe.

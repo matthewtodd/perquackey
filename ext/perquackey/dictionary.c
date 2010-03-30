@@ -61,7 +61,7 @@ VALUE Dictionary_words(VALUE self, VALUE letters) {
 }
 
 void Init_dictionary() {
-  mPerquackey = rb_const_get(rb_cObject, rb_intern("Perquackey"));
+  mPerquackey = rb_define_module("Perquackey");
   cDictionary = rb_define_class_under(mPerquackey, "Dictionary", rb_cObject);
   rb_define_method(cDictionary, "initialize", Dictionary_initialize, 1);
   rb_define_method(cDictionary, "words",      Dictionary_words, 1);

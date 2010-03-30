@@ -6,7 +6,7 @@ module Perquackey
     YAWL = File.expand_path('../perquackey/resources/yawl-0.3.2-word.list', __FILE__)
 
     def initialize
-      @dictionary = Dictionary.new(YAWL)
+      @dictionary = Dictionary.new(TWL)
     end
 
     def words(letters)

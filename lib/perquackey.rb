@@ -2,8 +2,7 @@ require 'perquackey/dictionary'
 
 module Perquackey
   class Game
-    TWL  = File.expand_path('../perquackey/resources/TWL06.txt',            __FILE__)
-    YAWL = File.expand_path('../perquackey/resources/yawl-0.3.2-word.list', __FILE__)
+    TWL = File.expand_path('../perquackey/resources/TWL06.txt', __FILE__)
 
     def initialize
       @dictionary = Dictionary.new(TWL)

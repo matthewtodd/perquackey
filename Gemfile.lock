@@ -20,12 +20,12 @@ specs:
 - sinatra: 
     version: "1.0"
 - perquackey: 
-    version: 0.6.0
+    version: 0.7.0
     source: 0
 - redgreen: 
     version: 1.2.2
 - shoe: 
-    version: 0.2.0
+    version: 0.3.0
 hash: 14672ab2c4446d18ba73453cd6aa0c75a6599f3d
 sources: 
 - Path: 

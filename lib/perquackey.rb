@@ -1,6 +1,6 @@
-require 'perquackey/dictionary'
-
 module Perquackey
+  autoload :Dictionary, 'perquackey/dictionary'
+
   class Game
     TWL = File.expand_path('../perquackey/resources/TWL06.txt', __FILE__)
 

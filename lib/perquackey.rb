@@ -1,5 +1,7 @@
 module Perquackey
+  autoload :Console,    'perquackey/console'
   autoload :Dictionary, 'perquackey/dictionary'
+  autoload :Server,     'perquackey/server'
 
   class Game
     TWL = File.expand_path('../perquackey/resources/TWL06.txt', __FILE__)

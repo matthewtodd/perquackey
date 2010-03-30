@@ -1,4 +1,3 @@
-require 'perquackey'
 require 'readline'
 
 module Perquackey

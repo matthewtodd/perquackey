@@ -1,4 +1,3 @@
-require 'perquackey'
 require 'sinatra/base'
 
 module Perquackey

@@ -1,6 +1,7 @@
+require 'perquackey/version'
 require 'shoe'
 
-Shoe.tie('perquackey', '0.6.0', 'Provides console session and simple webapp for looking up Perquackey word matches') do |spec|
+Shoe.tie('perquackey', Perquackey::VERSION, 'Provides console session and simple webapp for looking up Perquackey word matches') do |spec|
   spec.add_runtime_dependency('sinatra')
 end
 

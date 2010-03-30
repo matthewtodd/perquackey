@@ -2,7 +2,7 @@ require 'perquackey/dictionary'
 
 module Perquackey
   class Game
-    YAWL = File.join(File.dirname(__FILE__), '..', 'resources', 'yawl-0.3.2-word.list')
+    YAWL = File.expand_path('../perquackey/resources/yawl-0.3.2-word.list', __FILE__)
 
     def initialize
       @dictionary = Dictionary.new(YAWL)

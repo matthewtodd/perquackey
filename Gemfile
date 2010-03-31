@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'perquackey', :path => File.expand_path('..', __FILE__)
+gem 'perquackey', :path => '.'
 
 gem 'redgreen'
 gem 'shoe'

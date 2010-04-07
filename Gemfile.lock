@@ -2,34 +2,28 @@
 dependencies: 
   shoe: 
     group: 
-    - :default
-    version: ">= 0"
-  perquackey: 
+    - :development
+    version: = 0.4.0
+  sinatra: 
     group: 
     - :default
     version: ">= 0"
   redgreen: 
     group: 
-    - :default
+    - :development
     version: ">= 0"
 specs: 
 - rake: 
     version: 0.8.7
 - rack: 
     version: 1.1.0
-- sinatra: 
-    version: "1.0"
-- perquackey: 
-    version: 0.7.0
-    source: 0
 - redgreen: 
     version: 1.2.2
 - shoe: 
-    version: 0.3.0
-hash: 4a07b20af4577c9d2b10ea0dba36f2c8ecd4686d
+    version: 0.4.0
+- sinatra: 
+    version: "1.0"
+hash: 9b203f42432b43a40fc249ff71c6731ab2918299
 sources: 
-- Path: 
-    path: !ruby/object:Pathname 
-      path: .
 - Rubygems: 
     uri: http://gemcutter.org

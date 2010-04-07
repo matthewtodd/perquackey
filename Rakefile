@@ -1,9 +1,6 @@
-require 'perquackey'
 require 'shoe'
 
-Shoe.tie('perquackey', Perquackey::VERSION, 'Provides console session and simple webapp for looking up Perquackey word matches') do |spec|
-  spec.add_runtime_dependency('sinatra')
-end
+Shoe::Tasks.define('perquackey.gemspec')
 
 desc 'Run perquackey'
 task :exec, :options, :needs => :compile do |_, arguments|

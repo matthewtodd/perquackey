@@ -1,6 +1,8 @@
 source :rubygems
 
-gem 'perquackey', :path => '.'
+gem 'sinatra'
 
-gem 'redgreen'
-gem 'shoe'
+group :development do
+  gem 'redgreen'
+  gem 'shoe', '0.4.0'
+end

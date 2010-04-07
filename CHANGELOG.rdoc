@@ -1,3 +1,7 @@
+== 0.7.1 -- 2010-03-30
+* Reorganize code for autoloading.
+* Begin scant documentation.
+
 == 0.7.0 -- 2010-03-30
 * Switch from YAWL to TWL06 word list.
 * Upgrade build system to use Bundler.

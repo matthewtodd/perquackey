@@ -1,6 +1,5 @@
 * Dictionary should take some kind of IO object.
 * Include the C extension in the rdoc.
-* Push a release to gemcutter.
 * Use the web interface for in-game support:
   * Capture words
   * Calculate score

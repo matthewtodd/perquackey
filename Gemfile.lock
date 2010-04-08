@@ -3,7 +3,7 @@ dependencies:
   shoe: 
     group: 
     - :development
-    version: = 0.4.0
+    version: = 0.5.0
   sinatra: 
     group: 
     - :default
@@ -20,10 +20,10 @@ specs:
 - redgreen: 
     version: 1.2.2
 - shoe: 
-    version: 0.4.0
+    version: 0.5.0
 - sinatra: 
     version: "1.0"
-hash: 9b203f42432b43a40fc249ff71c6731ab2918299
+hash: 9796c4195ba13364bf0cf730eff55f5a25a0f6f7
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

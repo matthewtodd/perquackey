@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'test/test_helper'
 
 class WordTableTest < Test::Unit::TestCase
   def test_handles_empty_list

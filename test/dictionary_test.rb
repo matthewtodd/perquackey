@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'test/test_helper'
 
 class DictionaryTest < Test::Unit::TestCase
   def test_simple_search_with_twl

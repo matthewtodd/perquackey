@@ -1,4 +1,4 @@
-== 0.7.1 -- 2010-03-30
+== Git
 * Reorganize code for autoloading.
 * Begin scant documentation.
 

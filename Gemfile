@@ -1,6 +1,6 @@
 source :rubygems
 
-gem 'sinatra'
+gem 'perquackey', :path => File.expand_path('.')
 
 group :development do
   gem 'redgreen'

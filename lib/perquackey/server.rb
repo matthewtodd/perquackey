@@ -2,7 +2,7 @@ require 'sinatra/base'
 
 module Perquackey
   class Server < Sinatra::Base
-    set :views, File.dirname(__FILE__) + '/server'
+    set :views, Perquackey.datadir + '/templates'
 
     get %r{^/([a-z]{0,13})$} do |letters|
       erb :index, :locals => { :letters => letters, :words => Game.new.words(letters) }

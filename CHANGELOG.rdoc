@@ -1,5 +1,6 @@
 == Git
 * Reorganize code for autoloading.
+* Reorganize code to properly use datadir.
 * Begin scant documentation.
 
 == 0.7.0 -- 2010-03-30

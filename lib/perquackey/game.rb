@@ -1,6 +1,6 @@
 module Perquackey
   class Game
-    TWL = File.expand_path('../resources/TWL06.txt', __FILE__)
+    TWL = File.join(Perquackey.datadir, 'dict', 'TWL06.txt')
 
     def initialize
       @dictionary = Dictionary.new(TWL)

@@ -6,4 +6,8 @@ module Perquackey
   autoload :Game,       'perquackey/game'
   autoload :Server,     'perquackey/server'
   autoload :WordTable,  'perquackey/word_table'
+
+  def self.datadir
+    RbConfig.datadir('perquackey')
+  end
 end

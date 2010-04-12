@@ -1,3 +1,4 @@
+.rvmrc
 Makefile
 *.bundle
 *.gem

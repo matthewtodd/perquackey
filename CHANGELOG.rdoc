@@ -1,5 +1,5 @@
 == Git
-* Move Dictionary into Ruby-land, leaving only spell? in C.
+* Refactor Dictionary to have Ruby parts, with a C extension starting at the fgets on the IO stream.
 * Reorganize code for autoloading.
 * Reorganize code to properly use datadir.
 * Begin scant documentation.

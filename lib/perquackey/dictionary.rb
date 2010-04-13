@@ -5,11 +5,19 @@ module Perquackey
     end
 
     def words(letters)
-      letters.extend(StringExtensions)
+      letters.extend StringExtensions
 
       File.open(@path) do |stream|
-        stream.select { |word| letters.spell? word.chomp }.
-              collect { |word| word.chomp }
+        stream.extend Chomped
+        stream.select { |word| letters.spell? word }
+      end
+    end
+
+    private
+
+    module Chomped
+      def each
+        super { |string| yield string.chomp }
       end
     end
   end

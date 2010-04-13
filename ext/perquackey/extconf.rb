@@ -1,2 +1,2 @@
 require 'mkmf'
-create_makefile 'perquackey/dictionary'
+create_makefile 'perquackey/string_extensions'

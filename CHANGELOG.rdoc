@@ -1,4 +1,5 @@
 == Git
+* Move Dictionary into Ruby-land, leaving only spell? in C.
 * Reorganize code for autoloading.
 * Reorganize code to properly use datadir.
 * Begin scant documentation.

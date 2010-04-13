@@ -1,13 +1,15 @@
 module Perquackey
   class Dictionary
-    def initialize(path)
-      @path = path
+    TOURNAMENT_WORD_LIST = Perquackey.datadir.join('dict', 'TWL06.txt')
+
+    def initialize
+      @word_list = TOURNAMENT_WORD_LIST
     end
 
     def words(letters)
       letters.extend StringExtensions
 
-      File.open(@path) do |stream|
+      @word_list.open do |stream|
         stream.extend Chomped
         stream.select { |word| letters.spell? word }
       end

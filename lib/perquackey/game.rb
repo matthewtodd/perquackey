@@ -1,9 +1,7 @@
 module Perquackey
   class Game
-    TWL = File.join(Perquackey.datadir, 'dict', 'TWL06.txt')
-
     def initialize
-      @dictionary = Dictionary.new(TWL)
+      @dictionary = Dictionary.new
     end
 
     def words(letters)

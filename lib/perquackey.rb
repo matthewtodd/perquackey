@@ -1,3 +1,5 @@
+require 'pathname'
+
 module Perquackey
   VERSION = '0.7.0'
 
@@ -10,6 +12,6 @@ module Perquackey
   autoload :WordTable,        'perquackey/word_table'
 
   def self.datadir
-    RbConfig.datadir('perquackey')
+    Pathname.new RbConfig.datadir('perquackey')
   end
 end

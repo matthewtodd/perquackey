@@ -1,6 +1,6 @@
 require 'perquackey'
 require 'test/unit'
 
-if $stdin.tty?
+if $stdout.tty?
   require 'redgreen'
 end

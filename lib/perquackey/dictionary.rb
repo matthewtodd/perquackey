@@ -7,19 +7,8 @@ module Perquackey
     end
 
     def words(letters)
-      letters.extend StringExtensions
-
       @word_list.open do |stream|
-        stream.extend Chomped
-        stream.select { |word| letters.spell? word }
-      end
-    end
-
-    private
-
-    module Chomped
-      def each
-        super { |string| yield string.chomp }
+        stream.extend(Anagrams).anagrams(letters)
       end
     end
   end

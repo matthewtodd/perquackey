@@ -1,2 +1,2 @@
 require 'mkmf'
-create_makefile 'perquackey/string_extensions'
+create_makefile 'perquackey/anagrams'

@@ -3,6 +3,45 @@
 static VALUE mPerquackey;
 static VALUE mStringExtensions;
 
+// This scratch pad algorithm was lifted from YAWL's anagram.c, and then the
+// particulars were modified to take advantage of Ruby's String copying
+// functions.
+//
+// I tried writing this in Ruby, but it was noticeably slower:
+//
+// def spell?(other)
+//   scratch_pad = dup
+//
+//   other.each_char do |letter|
+//     if found = scratch_pad.index(letter)
+//       scratch_pad[found] = '@'
+//     else
+//       return false
+//     end
+//   end
+//
+//   true
+// end
+//
+// Someday, I would like to experiment with pulling more of the Dictionary code
+// back into C. It would be lovely to be able to write something like this:
+//
+// def words(letters)
+//   words = []
+//
+//   @word_list.open do |stream|
+//     stream.extend(Anagrams)
+//     stream.each_anagram(letters) do |word|
+//       words << word
+//     end
+//   end
+//
+//   words
+// end
+//
+// Or perhaps each_anagram could even handle opening the stream for me.
+// Alternatively, maybe this spelling will be fast enough if I can move the
+// memory used by scratch_pad into an instance variable?
 VALUE StringExtensions_spell_p(VALUE self, VALUE other) {
   VALUE scratch_pad_value;
   register char *scratch_pad;

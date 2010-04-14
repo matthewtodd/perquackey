@@ -1,10 +1,16 @@
-<form name="form" action="/" method="post">
-  <input name="letters" value="<%= letters %>" autocomplete="off">
+<form action="/" method="post">
+  <input name="letters"
+        value="<%= letters %>"
+ autocomplete="on"
+    autofocus="on"
+    maxlength="13"
+      pattern="[a-z]{10}([a-z]{3})?"
+  placeholder="Type your letters here."
+     required="on"
+        title="Perquackey rolls are 10 or 13 letters."
+         type="search"
+  />
 </form>
-
-<script type="text/javascript">
-  document.forms.form.letters.focus();
-</script>
 
 <table>
   <tr>

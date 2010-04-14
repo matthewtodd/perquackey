@@ -1,4 +1,6 @@
 require 'pathname'
+require 'rbconfig'
+require 'rbconfig/datadir'
 
 module Perquackey
   VERSION = '0.7.0'

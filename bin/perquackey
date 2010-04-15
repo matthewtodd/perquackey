@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
 require 'perquackey'
-Perquackey::Application.new(ARGV).run!
+Perquackey::Application.run!(ARGV)

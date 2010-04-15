@@ -1,29 +1,47 @@
 require 'optparse'
-require 'ostruct'
 
 module Perquackey
   class Application
-    def initialize(argv)
-      @conf = OpenStruct.new(:mode => :console, :port => 3000)
-
-      opts = OptionParser.new do |opts|
-        opts.banner = "Usage: #{File.basename($0)} [options]"
-        opts.separator ''
-        opts.on('-s', '--server', 'Run as a web server') { @conf.mode = :server }
-        opts.on('-p', '--port PORT', "Port for web server (defaults to #{@conf.port})") { |port| @conf.port = port }
-        opts.on('-h', '--help', 'Show this message') { puts opts; exit }
-        opts.separator ''
-      end
-
-      opts.parse! argv
+    def self.run!(argv) #:nodoc:
+      new.run!(argv)
     end
 
-    def run!
-      case @conf.mode
+    def initialize
+      @mode = :console
+
+      @options = OptionParser.new do |opts|
+        opts.banner = "Usage: #{File.basename($0)} [OPTIONS]"
+        opts.separator ''
+        opts.separator 'Specific options:'
+
+        opts.on('-s', '--server [PORT]', 'Run a web server.') do |port|
+          @mode = :server
+          @port = port || 3000
+        end
+
+        opts.separator ''
+        opts.separator 'Common options:'
+
+        opts.on_tail('-h', '--help', 'Show this message.') do
+          puts opts
+          exit
+        end
+
+        opts.on_tail('-v', '--version', 'Print version and exit.') do
+          puts "perquackey #{Perquackey::VERSION}"
+          exit
+        end
+      end
+    end
+
+    def run!(argv)
+      @options.parse!(argv)
+
+      case @mode
       when :console
         Perquackey::Console.run!
       when :server
-        Perquackey::Server.run!(:port => @conf.port)
+        Perquackey::Server.run!(:port => @port)
       end
     end
   end

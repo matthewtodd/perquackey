@@ -1,4 +1,6 @@
 == Git
+
+== 0.7.1 -- 2010-04-15
 * Refactor Dictionary to have Ruby parts, with a C extension starting at the fgets on the IO stream.
 * Reorganize code for autoloading.
 * Reorganize code to properly use datadir.

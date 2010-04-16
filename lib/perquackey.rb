@@ -3,7 +3,7 @@ require 'rbconfig'
 require 'rbconfig/datadir'
 
 module Perquackey
-  VERSION = '0.7.0'
+  VERSION = '0.7.1'
 
   autoload :Anagrams,   'perquackey/anagrams'
   autoload :Application,'perquackey/application'

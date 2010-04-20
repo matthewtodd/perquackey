@@ -10,32 +10,20 @@ module Perquackey
       @mode = :console
 
       @options = OptionParser.new do |opts|
-        opts.banner = "Usage: #{File.basename($0)} [OPTIONS]"
-        opts.separator ''
-        opts.separator 'Specific options:'
-
-        opts.on('-s', '--server [PORT]', 'Run a web server.') do |port|
+        opts.version = Perquackey::VERSION
+        opts.on('-s', '--server [port]', 'Run a web server.') do |port|
           @mode = :server
           @port = port || 3000
-        end
-
-        opts.separator ''
-        opts.separator 'Common options:'
-
-        opts.on_tail('-h', '--help', 'Show this message.') do
-          puts opts
-          exit
-        end
-
-        opts.on_tail('-v', '--version', 'Print version and exit.') do
-          puts "perquackey #{Perquackey::VERSION}"
-          exit
         end
       end
     end
 
     def run!(argv)
-      @options.parse!(argv)
+      begin
+        @options.parse(argv)
+      rescue OptionParser::ParseError
+        @options.abort($!)
+      end
 
       case @mode
       when :console

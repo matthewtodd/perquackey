@@ -1,5 +1,8 @@
 == Git
 * Clean up command-line options.
+* Write a perquackey(1) man page.
+* `gem check --test perquackey` should work now!
+* Require at least Ruby 1.8.7 -- building on 1.8.6 fails.
 
 == 0.7.1 -- 2010-04-15
 * Refactor Dictionary to have Ruby parts, with a C extension starting at the fgets on the IO stream.

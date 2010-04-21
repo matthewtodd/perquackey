@@ -11,6 +11,7 @@ Gem::Specification.new do |spec|
   spec.email  = 'matthew.todd@gmail.com'
   spec.homepage = 'http://github.com/matthewtodd/perquackey'
 
+  spec.required_ruby_version = '>= 1.8.7'
   spec.add_runtime_dependency 'sinatra'
   spec.add_development_dependency 'redgreen'
   spec.add_development_dependency 'ronn'

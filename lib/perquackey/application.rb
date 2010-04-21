@@ -18,7 +18,7 @@ module Perquackey
           @mode = :console
         end
 
-        opts.on('-s', '--server [port]', 'Run an http server.') do |port|
+        opts.on('-s', '--server[=port]', 'Run an http server.') do |port|
           @mode = :server
           @port = port || 3000
         end

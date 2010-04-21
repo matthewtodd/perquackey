@@ -1,0 +1,76 @@
+perquackey(1) -- print a list of anagrams
+=========================================
+
+## SYNOPSIS
+
+`perquackey`  
+`perquackey` --server[=_port_]
+
+## DESCRIPTION
+
+`perquackey` prints a list of anagrams for a given letter set, arranged in
+columns by length. It's designed as a companion to the Perquackey word game,
+vindicating you on the tough rolls and taunting you when you're blind to the
+_I_ _N_ _G_ right in front of your nose. Use with caution.
+
+## OPTIONS
+
+By default, `perquackey` runs an interactive console for you to type in your
+letters. You can change that with the following options:
+
+  * `-c`, `--console`:
+    Run an interactive console. Being the default mode, this option exists
+    purely for the sake of symmetry.
+
+  * `-s`, `--server`[=_port_]:
+    Run an http server. You can then type your letters in and see results at
+    <http://localhost:port/>, where <port> defaults to _3000_.
+
+`perquackey` also responds to the following standard options:
+
+  * `-h`, `--help`:
+    Print a help message and exit.
+
+  * `-v`, `--version`[=all]:
+    Print `perquackey`'s version number and exit. If `=all` is given, also
+    print version numbers of `perquackey`'s dependencies. (This is standard
+    `optparse` behavior that deserves more attention!)
+
+## EXAMPLE
+
+Run an interactive console session, look up anagrams for "amwortixet," and exit:
+
+    $ perquackey
+    Type ctrl-d or quit to exit.
+    > amwortixet
+    aim aero aimer attire omitter amoretti
+    air airt amort extort toxemia
+    ait amie armet imaret tritoma
+    ami amir axiom matier wartime
+    are atom axite matrix
+    arm emir extra matter
+    art emit irate ratite
+    ate exam ixora remixt
+    att exit mater rotate
+
+    (...and so on...)
+
+    > quit
+    Goodbye.
+
+## BUGS
+
+Anagrams are generated from an internal copy of TWL06, the standard accepted
+word list at North American Scrabble tournaments. You're going to see some
+weird ones. ("Ixora"?!)
+
+## AUTHOR
+
+Matthew Todd, _@matthewtodd_ on GitHub and Twitter. Do drop me a line if you
+use `perquackey` -- I'd love to hear from you!
+
+## SEE ALSO
+
+<http://en.wikipedia.org/wiki/Perquackey>,
+<http://en.wikipedia.org/wiki/Tournament_Word_List>,
+<http://perquackey.matthewtodd.org/>

@@ -13,6 +13,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'sinatra'
   spec.add_development_dependency 'redgreen'
+  spec.add_development_dependency 'ronn'
   spec.add_development_dependency 'shoe'
 
   def spec.git_files(glob=nil)

@@ -4,6 +4,10 @@ dependencies:
     group: 
     - :development
     version: ">= 0"
+  ronn: 
+    group: 
+    - :development
+    version: ">= 0"
   sinatra: 
     group: 
     - :default
@@ -17,17 +21,23 @@ specs:
     version: 0.8.7
 - configuration: 
     version: 1.1.0
+- hpricot: 
+    version: 0.8.2
 - launchy: 
     version: 0.3.5
 - rack: 
     version: 1.1.0
+- rdiscount: 
+    version: 1.6.3.1
 - redgreen: 
     version: 1.2.2
+- ronn: 
+    version: "0.5"
 - shoe: 
     version: 0.6.0
 - sinatra: 
     version: "1.0"
-hash: 99821b026938c83120ee8b03a955adce061c3e25
+hash: 43e16f41a78020948379f93caebbae6705f7a82c
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

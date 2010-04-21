@@ -1,0 +1,84 @@
+.\" generated with Ronn/v0.5
+.\" http://github.com/rtomayko/ronn/
+.
+.TH "PERQUACKEY" "1" "April 2010" "Matthew Todd" "RubyGems Manual"
+.
+.SH "NAME"
+\fBperquackey\fR \-\- print a list of anagrams
+.
+.SH "SYNOPSIS"
+\fBperquackey\fR
+.
+.br
+\fBperquackey\fR \-\-server[=\fIport\fR]
+.
+.SH "DESCRIPTION"
+\fBperquackey\fR prints a list of anagrams for a given letter set, arranged in
+columns by length. It's designed as a companion to the Perquackey word game,
+vindicating you on the tough rolls and taunting you when you're blind to the \fII\fR \fIN\fR \fIG\fR right in front of your nose. Use with caution.
+.
+.SH "OPTIONS"
+By default, \fBperquackey\fR runs an interactive console for you to type in your
+letters. You can change that with the following options:
+.
+.TP
+\fB\-c\fR, \fB\-\-console\fR
+Run an interactive console. Being the default mode, this option exists
+purely for the sake of symmetry.
+.
+.TP
+\fB\-s\fR, \fB\-\-server\fR[=\fIport\fR]
+Run an http server. You can then type your letters in and see results at \fIhttp://localhost:port/\fR, where \fIport\fR defaults to \fI3000\fR.
+.
+.P
+\fBperquackey\fR also responds to the following standard options:
+.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print a help message and exit.
+.
+.TP
+\fB\-v\fR, \fB\-\-version\fR[=all]
+Print \fBperquackey\fR's version number and exit. If \fB=all\fR is given, also
+print version numbers of \fBperquackey\fR's dependencies. (This is standard \fBoptparse\fR behavior that deserves more attention!)
+.
+.SH "EXAMPLE"
+Run an interactive console session, look up anagrams for "amwortixet," and exit:
+.
+.IP "" 4
+.
+.nf
+
+$ perquackey
+Type ctrl\-d or quit to exit.
+> amwortixet
+aim aero aimer attire omitter amoretti
+air airt amort extort toxemia
+ait amie armet imaret tritoma
+ami amir axiom matier wartime
+are atom axite matrix
+arm emir extra matter
+art emit irate ratite
+ate exam ixora remixt
+att exit mater rotate
+
+(...and so on...)
+
+> quit
+Goodbye.
+.
+.fi
+.
+.IP "" 0
+.
+.SH "BUGS"
+Anagrams are generated from an internal copy of TWL06, the standard accepted
+word list at North American Scrabble tournaments. You're going to see some
+weird ones. ("Ixora"?!)
+.
+.SH "AUTHOR"
+Matthew Todd, \fI@matthewtodd\fR on GitHub and Twitter. Do drop me a line if you
+use \fBperquackey\fR \-\- I'd love to hear from you!
+.
+.SH "SEE ALSO"
+\fIhttp://en.wikipedia.org/wiki/Perquackey\fR, \fIhttp://en.wikipedia.org/wiki/Tournament_Word_List\fR, \fIhttp://perquackey.matthewtodd.org/\fR

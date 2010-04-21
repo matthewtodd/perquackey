@@ -14,6 +14,13 @@ module Perquackey
   autoload :WordTable,  'perquackey/word_table'
 
   def self.datadir
-    Pathname.new RbConfig.datadir('perquackey')
+    @@datadir ||= begin
+      datadir = RbConfig.datadir('perquackey')
+      if !File.exist?(datadir)
+        warn "WARN: #{datadir} does not exist.\n  Trying again with relative data directory..."
+        datadir = File.expand_path('../../data/perquackey', __FILE__)
+      end
+      Pathname.new(datadir)
+    end
   end
 end

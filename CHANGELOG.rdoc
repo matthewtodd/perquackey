@@ -1,4 +1,4 @@
-== Git
+== 0.7.2 -- 2010-04-21
 * Clean up command-line options.
 * Write a perquackey(1) man page.
 * `gem check --test perquackey` should work now!

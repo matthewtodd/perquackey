@@ -7,20 +7,31 @@ module Perquackey
     end
 
     def initialize
-      @mode = :console
+      @defaults = %w(--console)
 
-      @options = OptionParser.new do |opts|
+      @options  = OptionParser.new do |opts|
+        opts.banner  = "Usage: #{File.basename($0)} [-c|-s]"
         opts.version = Perquackey::VERSION
-        opts.on('-s', '--server [port]', 'Run a web server.') do |port|
+        opts.separator ''
+
+        opts.on('-c', '--console', 'Run an interactive console.') do
+          @mode = :console
+        end
+
+        opts.on('-s', '--server [port]', 'Run an http server.') do |port|
           @mode = :server
           @port = port || 3000
         end
+
+        opts.separator ''
+        opts.separator 'Defaults:'
+        opts.separator "#{opts.summary_indent}#{@defaults.join(' ')}"
       end
     end
 
     def run!(argv)
       begin
-        @options.parse(argv)
+        @options.parse(@defaults.dup.concat(argv))
       rescue OptionParser::ParseError
         @options.abort($!)
       end

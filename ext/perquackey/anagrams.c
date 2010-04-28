@@ -9,7 +9,7 @@
 static VALUE mPerquackey;
 static VALUE mAnagrams;
 
-void chop(char *string) {
+static void chop(char *string) {
   int length = strlen(string);
 
   if (length > 0 && string[length-1] == '\n') {
@@ -17,7 +17,7 @@ void chop(char *string) {
   }
 }
 
-int anagram_p(char *letters, char *word) {
+static int anagram_p(char *letters, char *word) {
   static char scratch_pad[MAX_LENGTH];
   register char *scratch_pad_ptr;
 
@@ -34,7 +34,7 @@ int anagram_p(char *letters, char *word) {
   return TRUE;
 }
 
-VALUE Anagrams_anagrams(VALUE self, VALUE letters) {
+static VALUE Anagrams_anagrams(VALUE self, VALUE letters) {
   return rb_apply(
            rb_apply(self,
                     rb_intern("enum_for"),
@@ -43,7 +43,7 @@ VALUE Anagrams_anagrams(VALUE self, VALUE letters) {
            rb_ary_new());
 }
 
-VALUE Anagrams_each_anagram(VALUE self, VALUE letters_value) {
+static VALUE Anagrams_each_anagram(VALUE self, VALUE letters_value) {
   rb_io_t *stream;
   char     word[MAX_LENGTH];
   char    *letters = RSTRING(letters_value)->ptr;

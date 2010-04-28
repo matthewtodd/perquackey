@@ -66,8 +66,8 @@ weird ones. ("Ixora"?!)
 
 ## AUTHOR
 
-Matthew Todd, _@matthewtodd_ on GitHub and Twitter. Do drop me a line if you
-use `perquackey` -- I'd love to hear from you!
+Matthew Todd, [matthewtodd](http://github.com/matthewtodd) on GitHub. Do drop
+me a line if you use `perquackey` -- I'd love to hear from you!
 
 ## SEE ALSO
 

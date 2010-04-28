@@ -34,6 +34,14 @@ static int anagram_p(char *letters, char *word) {
   return TRUE;
 }
 
+/*
+ * Document-class: Anagrams
+ * Document-method: anagrams
+ *
+ * call-seq:
+ *   anagrams(letters) -> array
+ *
+ */
 static VALUE Anagrams_anagrams(VALUE self, VALUE letters) {
   return rb_apply(
            rb_apply(self,
@@ -43,6 +51,14 @@ static VALUE Anagrams_anagrams(VALUE self, VALUE letters) {
            rb_ary_new());
 }
 
+/*
+ * Document-class: Anagrams
+ * Document-method: each_anagram
+ *
+ * call-seq:
+ *   each_anagram(letters) { |anagram| ... } -> nil
+ *
+ */
 static VALUE Anagrams_each_anagram(VALUE self, VALUE letters_value) {
   rb_io_t *stream;
   char     word[MAX_LENGTH];
@@ -61,6 +77,18 @@ static VALUE Anagrams_each_anagram(VALUE self, VALUE letters_value) {
   return Qnil;
 }
 
+/*
+ * Anagrams extends a File-backed IO stream with the ability to yield each
+ * anagram of the given letters it contains:
+ *
+ *  File.open('/usr/share/dict/words') do |stream|
+ *    stream.extend(Anagrams)
+ *    stream.each_anagram('asdfuiop') do |anagram|
+ *      puts anagram
+ *    end
+ *  end
+ *
+ */
 void Init_anagrams() {
   mPerquackey = rb_define_module("Perquackey");
   mAnagrams = rb_define_module_under(mPerquackey, "Anagrams");

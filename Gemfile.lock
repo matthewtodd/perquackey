@@ -34,7 +34,7 @@ specs:
 - ronn: 
     version: "0.5"
 - shoe: 
-    version: 0.6.0
+    version: 0.6.2
 - sinatra: 
     version: "1.0"
 hash: 43e16f41a78020948379f93caebbae6705f7a82c

@@ -1,3 +1,6 @@
+== 0.7.3 -- 2010-04-29
+* Document C extension.
+
 == 0.7.2 -- 2010-04-21
 * Clean up command-line options.
 * Write a perquackey(1) man page.

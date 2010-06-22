@@ -4,6 +4,10 @@ dependencies:
     group: 
     - :development
     version: ~> 0.6.2
+  optparse-defaults: 
+    group: 
+    - :default
+    version: ~> 0.1.0
   ronn: 
     group: 
     - :development
@@ -25,6 +29,8 @@ specs:
     version: 0.8.2
 - launchy: 
     version: 0.3.5
+- optparse-defaults: 
+    version: 0.1.0
 - rack: 
     version: 1.1.0
 - rdiscount: 
@@ -37,7 +43,7 @@ specs:
     version: 0.6.2
 - sinatra: 
     version: "1.0"
-hash: 0a34f7a164462236b973fe816a3ec921ff0be4d2
+hash: e384cf1845a28070169a284570e52996d81d5d6f
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

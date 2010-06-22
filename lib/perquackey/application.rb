@@ -1,4 +1,4 @@
-require 'optparse'
+require 'optparse/defaults'
 
 module Perquackey
   class Application
@@ -7,11 +7,10 @@ module Perquackey
     end
 
     def initialize
-      @defaults = %w(--console)
-
-      @options  = OptionParser.new do |opts|
-        opts.banner  = "Usage: #{File.basename($0)} [-c|-s]"
-        opts.version = Perquackey::VERSION
+      @options = OptionParser.with_defaults do |opts|
+        opts.banner   = "Usage: #{File.basename($0)} [-c|-s]"
+        opts.defaults = %w(--console)
+        opts.version  = Perquackey::VERSION
         opts.separator ''
 
         opts.on('-c', '--console', 'Run an interactive console.') do
@@ -22,19 +21,11 @@ module Perquackey
           @mode = :server
           @port = port || 3000
         end
-
-        opts.separator ''
-        opts.separator 'Defaults:'
-        opts.separator "#{opts.summary_indent}#{@defaults.join(' ')}"
       end
     end
 
     def run!(argv)
-      begin
-        @options.parse(@defaults.dup.concat(argv))
-      rescue OptionParser::ParseError
-        @options.abort($!)
-      end
+      @options.order(argv)
 
       case @mode
       when :console

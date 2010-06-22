@@ -1,6 +1,7 @@
 source :rubygems
 
-gem 'sinatra', '~> 1.0'
+gem 'sinatra',           '~> 1.0'
+gem 'optparse-defaults', '~> 0.1.0'
 
 group :development do
   gem 'redgreen', '~> 1.2.2'

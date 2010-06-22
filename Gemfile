@@ -1,9 +1,9 @@
 source :rubygems
 
-gem 'sinatra'
+gem 'sinatra', '~> 1.0'
 
 group :development do
-  gem 'redgreen'
-  gem 'ronn'
-  gem 'shoe'
+  gem 'redgreen', '~> 1.2.2'
+  gem 'ronn',     '~> 0.5'
+  gem 'shoe',     '~> 0.6.2'
 end

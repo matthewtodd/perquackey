@@ -3,19 +3,19 @@ dependencies:
   shoe: 
     group: 
     - :development
-    version: ">= 0"
+    version: ~> 0.6.2
   ronn: 
     group: 
     - :development
-    version: ">= 0"
+    version: ~> 0.5
   sinatra: 
     group: 
     - :default
-    version: ">= 0"
+    version: ~> 1.0
   redgreen: 
     group: 
     - :development
-    version: ">= 0"
+    version: ~> 1.2.2
 specs: 
 - rake: 
     version: 0.8.7
@@ -37,7 +37,7 @@ specs:
     version: 0.6.2
 - sinatra: 
     version: "1.0"
-hash: 43e16f41a78020948379f93caebbae6705f7a82c
+hash: 0a34f7a164462236b973fe816a3ec921ff0be4d2
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

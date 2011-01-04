@@ -1,49 +1,35 @@
---- 
-dependencies: 
-  shoe: 
-    group: 
-    - :development
-    version: ~> 0.6.2
-  optparse-defaults: 
-    group: 
-    - :default
-    version: ~> 0.1.0
-  ronn: 
-    group: 
-    - :development
-    version: ~> 0.5
-  sinatra: 
-    group: 
-    - :default
-    version: ~> 1.0
-  redgreen: 
-    group: 
-    - :development
-    version: ~> 1.2.2
-specs: 
-- rake: 
-    version: 0.8.7
-- configuration: 
-    version: 1.1.0
-- hpricot: 
-    version: 0.8.2
-- launchy: 
-    version: 0.3.5
-- optparse-defaults: 
-    version: 0.1.0
-- rack: 
-    version: 1.1.0
-- rdiscount: 
-    version: 1.6.3.1
-- redgreen: 
-    version: 1.2.2
-- ronn: 
-    version: "0.5"
-- shoe: 
-    version: 0.6.2
-- sinatra: 
-    version: "1.0"
-hash: e384cf1845a28070169a284570e52996d81d5d6f
-sources: 
-- Rubygems: 
-    uri: http://gemcutter.org
+GEM
+  remote: http://rubygems.org/
+  specs:
+    configuration (1.2.0)
+    hpricot (0.8.3)
+    launchy (0.3.7)
+      configuration (>= 0.0.5)
+      rake (>= 0.8.1)
+    mustache (0.12.0)
+    optparse-defaults (0.1.0)
+    rack (1.2.1)
+    rake (0.8.7)
+    rdiscount (1.6.5)
+    redgreen (1.2.2)
+    ronn (0.7.3)
+      hpricot (>= 0.8.2)
+      mustache (>= 0.7.0)
+      rdiscount (>= 1.5.8)
+    shoe (0.6.2)
+      launchy
+      rake
+    sinatra (1.1.2)
+      rack (~> 1.1)
+      tilt (~> 1.2)
+    tilt (1.2.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  optparse-defaults (~> 0.1.0)
+  redgreen (~> 1.2.2)
+  ronn (~> 0.5)
+  shoe (~> 0.6.2)
+  sinatra (~> 1.0)

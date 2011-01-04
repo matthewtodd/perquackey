@@ -36,23 +36,6 @@ static int anagram_p(char *letters, char *word) {
 
 /*
  * Document-class: Anagrams
- * Document-method: anagrams
- *
- * call-seq:
- *   anagrams(letters) -> array
- *
- */
-static VALUE Anagrams_anagrams(VALUE self, VALUE letters) {
-  return rb_apply(
-           rb_apply(self,
-                    rb_intern("enum_for"),
-                    rb_ary_new3(2, rb_str_new2("each_anagram"), letters)),
-           rb_intern("to_a"),
-           rb_ary_new());
-}
-
-/*
- * Document-class: Anagrams
  * Document-method: each_anagram
  *
  * call-seq:
@@ -92,6 +75,5 @@ static VALUE Anagrams_each_anagram(VALUE self, VALUE letters_value) {
 void Init_anagrams() {
   mPerquackey = rb_define_module("Perquackey");
   mAnagrams = rb_define_module_under(mPerquackey, "Anagrams");
-  rb_define_method(mAnagrams, "anagrams", Anagrams_anagrams, 1);
   rb_define_method(mAnagrams, "each_anagram", Anagrams_each_anagram, 1);
 }

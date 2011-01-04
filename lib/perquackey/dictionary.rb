@@ -6,7 +6,8 @@ module Perquackey
 
     def words(letters)
       anagrams = @word_list.open do |stream|
-        stream.extend(Anagrams).anagrams(letters)
+        stream.extend(Anagrams)
+        stream.enum_for(:each_anagram, letters).to_a
       end
 
       minimum = letters.length <= 10 ? 3 : 4

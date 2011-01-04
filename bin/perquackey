@@ -1,18 +1,4 @@
 #!/usr/bin/env ruby
 
-begin
-  require 'perquackey'
-rescue LoadError
-  raise unless $!.message =~ /\bperquackey$/
-
-  lib = File.expand_path('../../lib', __FILE__)
-  if !$:.include?(lib)
-    warn "WARN: #{$!}.\n  Trying again with #{lib} on the $LOAD_PATH..."
-    $:.unshift(lib)
-    retry
-  end
-
-  raise
-end
-
+require 'perquackey'
 Perquackey::Application.run!(ARGV)

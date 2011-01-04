@@ -5,7 +5,7 @@ module Perquackey
     end
 
     def words(letters)
-      WordTable.new(@dictionary.words(letters))
+      Table.new(@dictionary.words(letters))
     end
   end
 end

@@ -1,5 +1,5 @@
 module Perquackey
-  class WordTable
+  class Table
     include Enumerable
 
     def initialize(list=[])

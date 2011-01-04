@@ -11,7 +11,7 @@ module Perquackey
   autoload :Dictionary, 'perquackey/dictionary'
   autoload :Game,       'perquackey/game'
   autoload :Server,     'perquackey/server'
-  autoload :WordTable,  'perquackey/word_table'
+  autoload :Table,      'perquackey/table'
 
   def self.datadir
     Pathname.new RbConfig.datadir('perquackey')

@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    perquackey (0.7.3)
+      optparse-defaults (~> 0.1.0)
+      sinatra (~> 1.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -29,6 +36,7 @@ PLATFORMS
 
 DEPENDENCIES
   optparse-defaults (~> 0.1.0)
+  perquackey!
   redgreen (~> 1.2.2)
   ronn (~> 0.5)
   shoe (~> 0.6.2)

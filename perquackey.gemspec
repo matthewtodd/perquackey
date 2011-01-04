@@ -1,5 +1,5 @@
 $:.unshift File.expand_path('../lib', __FILE__)
-require 'perquackey'
+require 'perquackey/version'
 
 Gem::Specification.new do |spec|
   spec.name    = 'perquackey'

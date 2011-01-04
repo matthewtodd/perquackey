@@ -1,17 +1,20 @@
+<section>
 <form action="/" method="post">
   <input name="letters"
  autocomplete="off"
     autofocus="on"
     maxlength="13"
       pattern="[a-z]{10}([a-z]{3})?"
-  placeholder="Type your letters here."
+  placeholder="Enter your letters here."
      required="on"
          size="30"
         title="Perquackey rolls are 10 or 13 letters."
         value="<%= letters %>"
   />
 </form>
+</section>
 
+<section>
 <table>
   <tr>
     <% words.headers.each do |header| %>
@@ -27,3 +30,4 @@
     </tr>
   <% end %>
 </table>
+</section>

@@ -14,9 +14,7 @@ module Perquackey
       puts 'Type ctrl-d or quit to exit.'
 
       loop do
-        letters = prompt_for_letters
-
-        case letters
+        case letters = Readline::readline('> ')
         when nil, 'quit'
           puts 'Goodbye.'
           exit
@@ -30,10 +28,6 @@ module Perquackey
     end
 
     private
-
-    def prompt_for_letters
-      Readline::readline('> ')
-    end
 
     def words(letters)
       @game.words(letters).map { |row| row.join(' ') }

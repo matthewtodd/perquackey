@@ -14,10 +14,21 @@ class TableTest < Test::Unit::TestCase
     assert_equal [3, 4, 5], table.headers.to_a
 
     assert_equal [
-      'ape bear eagle',
-      'cat ibis goose',
-      'dog      hippo',
-      'fox           '
-    ], table.collect { |row| row.join(' ') }
+      ['ape', 'bear', 'eagle'],
+      ['cat', 'ibis', 'goose'],
+      ['dog', '    ', 'hippo'],
+      ['fox', '    ', '     ']
+    ], table.to_a
+  end
+
+  def test_to_s
+    table = Perquackey::Table.new %w(ape bear cat dog eagle fox goose hippo ibis)
+
+    assert_equal <<-END.gsub(/^ */, '').strip, table.to_s.strip
+      ape bear eagle
+      cat ibis goose
+      dog      hippo
+      fox
+    END
   end
 end

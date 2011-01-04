@@ -27,5 +27,9 @@ module Perquackey
         yield headers.collect { |length| @table[length][row_number] or ' ' * length}
       end
     end
+
+    def to_s
+      map { |row| row.join(' ') }.join("\n")
+    end
   end
 end

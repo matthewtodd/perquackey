@@ -30,7 +30,7 @@ module Perquackey
     private
 
     def words(letters)
-      @game.words(letters).map { |row| row.join(' ') }
+      @game.words(letters).to_s
     end
   end
 end

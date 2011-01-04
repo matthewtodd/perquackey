@@ -10,7 +10,7 @@ module Perquackey
         stream.enum_for(:each_anagram, letters).to_a
       end
 
-      minimum = letters.length <= 10 ? 3 : 4
+      minimum = (letters.length <= 10) ? 3 : 4
       anagrams.reject { |anagram| anagram.length < minimum }
     end
   end

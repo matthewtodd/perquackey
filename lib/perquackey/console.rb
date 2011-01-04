@@ -6,10 +6,6 @@ module Perquackey
       new.run
     end
 
-    def initialize
-      @dictionary = Dictionary.new
-    end
-
     def run
       puts 'Type ctrl-d or quit to exit.'
 
@@ -20,7 +16,7 @@ module Perquackey
           exit
         when /^[a-z]+$/
           Readline::HISTORY.push(letters)
-          puts Table.new(@dictionary.words(letters))
+          puts Table.new(Dictionary.words(letters))
         else
           next
         end

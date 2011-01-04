@@ -7,7 +7,7 @@ module Perquackey
     get %r{^/([a-z]{0,13})$} do |letters|
       erb :index, :locals => {
         :letters => letters,
-        :words   => Table.new(Dictionary.new.words(letters))
+        :words   => Table.new(Dictionary.words(letters))
       }
     end
 

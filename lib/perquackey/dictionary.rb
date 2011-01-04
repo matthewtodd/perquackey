@@ -1,5 +1,9 @@
 module Perquackey
   class Dictionary
+    def self.words(letters)
+      new.words(letters)
+    end
+
     def initialize
       @word_list = Perquackey.datadir.join('dict', 'TWL06.txt')
     end

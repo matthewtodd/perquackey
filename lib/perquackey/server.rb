@@ -5,7 +5,7 @@ module Perquackey
     set :views, Perquackey.datadir.join('templates')
 
     get %r{^/([a-z]{0,13})$} do |letters|
-      erb :index, :locals => { :letters => letters, :words => Game.new.words(letters) }
+      erb :index, :locals => { :letters => letters, :words => Table.new(Dictionary.new.words(letters)) }
     end
 
     post '/' do

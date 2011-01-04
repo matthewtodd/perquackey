@@ -7,7 +7,7 @@ module Perquackey
     end
 
     def initialize
-      @game = Game.new
+      @dictionary = Dictionary.new
     end
 
     def run
@@ -20,17 +20,11 @@ module Perquackey
           exit
         when /^[a-z]+$/
           Readline::HISTORY.push(letters)
-          puts words(letters)
+          puts Table.new(@dictionary.words(letters))
         else
           next
         end
       end
-    end
-
-    private
-
-    def words(letters)
-      @game.words(letters).to_s
     end
   end
 end

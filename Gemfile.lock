@@ -18,7 +18,6 @@ GEM
       rack
     rake (0.8.7)
     rdiscount (1.6.5)
-    redgreen (1.2.2)
     ronn (0.7.3)
       hpricot (>= 0.8.2)
       mustache (>= 0.7.0)
@@ -36,6 +35,5 @@ PLATFORMS
 
 DEPENDENCIES
   perquackey!
-  redgreen (~> 1.2.2)
   ronn (~> 0.5)
   shoe (~> 0.8.0)

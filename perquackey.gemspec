@@ -15,7 +15,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'json', '~> 1.6.3'
   spec.add_runtime_dependency 'sinatra', '~> 1.0'
   spec.add_runtime_dependency 'optparse-defaults', '~> 0.1.0'
-  spec.add_development_dependency 'redgreen', '~> 1.2.2'
   spec.add_development_dependency 'ronn', '~> 0.5'
   spec.add_development_dependency 'shoe', '~> 0.8.0'
 

@@ -1,8 +1,7 @@
 require 'perquackey/version'
 
 require 'pathname'
-require 'rbconfig'
-require 'rbconfig/datadir'
+require 'rubygems'
 
 module Perquackey
   autoload :Anagrams,   'perquackey/anagrams'
@@ -14,6 +13,6 @@ module Perquackey
   autoload :Table,      'perquackey/table'
 
   def self.datadir
-    Pathname.new RbConfig.datadir('perquackey')
+    Pathname.new Gem.datadir('perquackey')
   end
 end

@@ -1,5 +1,5 @@
 #include "ruby.h"
-#include "rubyio.h"
+#include "ruby/io.h"
 
 #define MAX_LENGTH 40
 #define XOUT '@'
@@ -45,11 +45,11 @@ static int anagram_p(char *letters, char *word) {
 static VALUE Anagrams_each_anagram(VALUE self, VALUE letters_value) {
   rb_io_t *stream;
   char     word[MAX_LENGTH];
-  char    *letters = RSTRING(letters_value)->ptr;
+  char    *letters = RSTRING_PTR(letters_value);
 
   GetOpenFile(self, stream);
 
-  while (fgets(word, sizeof(word), stream->f) != NULL) {
+  while (fgets(word, sizeof(word), rb_io_stdio_file(stream)) != NULL) {
     chop(word);
 
     if (anagram_p(letters, word)) {

@@ -1,4 +1,4 @@
-require 'test/helper'
+require 'helper'
 
 class TableTest < Test::Unit::TestCase
   def test_handles_empty_list

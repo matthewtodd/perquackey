@@ -1,5 +1,8 @@
 == Git
 
+== 0.8.0 -- 2011-12-23
+
+* JSON api: GET /rstlne.json
 * Use optparse-defaults for command line options.
 
 == 0.7.3 -- 2010-04-29

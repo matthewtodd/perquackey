@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    perquackey (0.7.3)
+    perquackey (0.8.0)
       json (~> 1.6.3)
       optparse-defaults (~> 0.1.0)
       sinatra (~> 1.0)

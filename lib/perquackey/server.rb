@@ -1,3 +1,4 @@
+require 'json'
 require 'sinatra/base'
 
 module Perquackey
@@ -9,6 +10,11 @@ module Perquackey
         :letters => letters,
         :words   => Table.new(Dictionary.words(letters))
       }
+    end
+
+    get %r{^/([a-z]{0,13})\.json$} do |letters|
+      content_type :json
+      Dictionary.words(letters).to_json
     end
 
     post '/' do

@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     perquackey (0.7.3)
+      json (~> 1.6.3)
       optparse-defaults (~> 0.1.0)
       sinatra (~> 1.0)
 
@@ -9,6 +10,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     hpricot (0.8.3)
+    json (1.6.3)
     mustache (0.12.0)
     optparse-defaults (0.1.0)
     rack (1.3.5)

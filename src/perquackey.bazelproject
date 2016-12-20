@@ -1,0 +1,8 @@
+directories:
+  src/test
+
+targets:
+  //src/test/...:all
+
+test_sources:
+  src/test/*

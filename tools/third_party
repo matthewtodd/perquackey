@@ -1,0 +1,135 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'net/https'
+require 'rexml/document'
+require 'uri'
+
+class Artifact
+  def self.parse(maven_coordinates)
+    new *maven_coordinates.split(':')
+  end
+
+  def initialize(group_id, artifact_id, version)
+    @group_id = group_id
+    @artifact_id = artifact_id
+    @version = version
+  end
+
+  def fetch(http_client)
+    pom = Pom.parse(http_client.get(pom_url))
+
+    FileUtils.rm_rf(package_path)
+    FileUtils.mkdir_p(package_path)
+
+    Dir.chdir(package_path) do
+      File.open(jar_name, 'wb') do |io|
+        io.write http_client.get(jar_url)
+      end
+
+      File.open(srcjar_name, 'wb') do |io|
+        io.write http_client.get(srcjar_url)
+      end
+
+      File.open('BUILD', 'w') do |io|
+        io.puts <<~END
+          licenses(["unencumbered"])
+
+          java_import(
+            name = "#{@artifact_id}",
+            deps = #{pom.dependencies.map(&:label).inspect},
+            jars = ["#{jar_name}"],
+            srcjar = "#{srcjar_name}",
+            visibility = ["//visibility:public"],
+          )
+        END
+      end
+    end
+
+    pom.dependencies.each do |artifact|
+      artifact.fetch(http_client)
+    end
+  end
+
+  def label
+    "//#{package_path}:#{@artifact_id}"
+  end
+
+  private
+
+  def package_path
+    "third_party/#{@artifact_id}"
+  end
+
+  def base_url
+    "/maven2/#{@group_id.gsub('.', '/')}/#{@artifact_id}/#{@version}"
+  end
+
+  def jar_name
+    "#{@artifact_id}-#{@version}.jar"
+  end
+
+  def srcjar_name
+    "#{@artifact_id}-#{@version}-sources.jar"
+  end
+
+  def jar_url
+    "#{base_url}/#{jar_name}"
+  end
+
+  def pom_url
+    "#{base_url}/#{@artifact_id}-#{@version}.pom"
+  end
+
+  def srcjar_url
+    "#{base_url}/#{srcjar_name}"
+  end
+end
+
+class Pom
+  def self.parse(xml)
+    new REXML::Document.new(xml)
+  end
+
+  def initialize(document)
+    @document = document
+  end
+
+  def dependencies
+    @dependencies ||= begin
+      @document.get_elements('project/dependencies/dependency').map do |dependency|
+        Artifact.new(
+          dependency.get_text('groupId').value,
+          dependency.get_text('artifactId').value,
+          dependency.get_text('version').value
+        )
+      end
+    end
+  end
+end
+
+class ThirdParty
+  WORKSPACE = File.expand_path('../..', __FILE__)
+
+  def initialize
+    @http = Net::HTTP.new('repo1.maven.org', 443)
+    @http.use_ssl = true
+  end
+
+  def run(artifact)
+    Dir.chdir(WORKSPACE) do
+      artifact.fetch(self)
+    end
+  end
+
+  def get(path)
+    $stderr.puts path
+    request = Net::HTTP::Get.new(path)
+    response = @http.request(request)
+    response.body
+  end
+end
+
+if $0 == __FILE__
+  ThirdParty.new.run(Artifact.parse(ARGV.shift))
+end

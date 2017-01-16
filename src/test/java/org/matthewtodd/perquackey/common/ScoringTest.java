@@ -1,4 +1,4 @@
-package org.matthewtodd.perquackey;
+package org.matthewtodd.perquackey.common;
 
 import org.junit.Assert;
 import org.junit.Test;

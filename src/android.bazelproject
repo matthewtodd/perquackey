@@ -1,0 +1,7 @@
+android_sdk_platform: 'android-22'
+
+directories:
+  src/main/java/org/matthewtodd/perquackey/android
+
+targets:
+  //src/main/java/org/matthewtodd/perquackey/android:android

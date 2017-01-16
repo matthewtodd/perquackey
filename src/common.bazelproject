@@ -1,0 +1,10 @@
+directories:
+  src/main/java/org/matthewtodd/perquackey/common
+  src/test/java/org/matthewtodd/perquackey/common
+
+targets:
+  //src/main/java/org/matthewtodd/perquackey/common:all
+  //src/test/java/org/matthewtodd/perquackey/common:all
+
+test_sources:
+  src/test/*

@@ -6,38 +6,95 @@ require 'rexml/document'
 require 'uri'
 
 class Artifact
-  def self.parse(maven_coordinates)
-    new *maven_coordinates.split(':')
+  def initialize(coordinates, contents)
+    @coordinates = coordinates
+    @contents = contents
   end
 
-  def initialize(group_id, artifact_id, version)
+  def as_xml
+    REXML::Document.new(@contents)
+  end
+
+  def write(mode)
+    File.open(@coordinates.basename, mode) { |io| io.write @contents }
+    @coordinates.basename
+  end
+end
+
+class Coordinates
+  attr_reader :group_id, :artifact_id
+
+  def self.parse(string)
+    group_id, artifact_id, version = string.split(':')
+
+    new(
+      group_id: group_id,
+      artifact_id: artifact_id,
+      version: version
+    )
+  end
+
+  def self.parse_xml(dependency)
+    new(
+      group_id: dependency.get_text('groupId').value,
+      artifact_id: dependency.get_text('artifactId').value,
+      version: dependency.get_text('version').value
+    )
+  end
+
+  def initialize(group_id:, artifact_id:, packaging: :jar, classifier: nil, version:)
     @group_id = group_id
     @artifact_id = artifact_id
+    @packaging = packaging.to_s
+    @classifier = classifier ? classifier.to_s : nil
     @version = version
   end
 
-  def fetch(http_client)
-    pom = Pom.parse(http_client.get(pom_url))
+  def basename
+    [@artifact_id, @version, @classifier].compact.join('-').concat('.').concat(@packaging)
+  end
+
+  def repository_path
+    File.join(@group_id.gsub('.', '/'), @artifact_id, @version, basename)
+  end
+
+  def with(packaging: @packaging, classifier: @classifier)
+    self.class.new(
+      group_id: @group_id,
+      artifact_id: @artifact_id,
+      packaging: packaging,
+      classifier: classifier,
+      version: @version
+    )
+  end
+end
+
+class Project
+  def initialize(coordinates)
+    @coordinates = coordinates
+  end
+
+  def fetch(repository)
+    pom = repository.get(@coordinates.with(packaging: :pom)).as_xml.
+
+    dependencies = pom.get_elements('project/dependencies/dependency').map do |dependency|
+      Project.new(Coordinates.parse_xml(dependency))
+    end
 
     FileUtils.rm_rf(package_path)
     FileUtils.mkdir_p(package_path)
 
     Dir.chdir(package_path) do
-      File.open(jar_name, 'wb') do |io|
-        io.write http_client.get(jar_url)
-      end
-
-      File.open(srcjar_name, 'wb') do |io|
-        io.write http_client.get(srcjar_url)
-      end
+      jar_name = repository.get(@coordinates).write('wb')
+      srcjar_name = repository.get(@coordinates.with(classifier: :sources)).write('wb')
 
       File.open('BUILD', 'w') do |io|
         io.puts <<~END
           licenses(["unencumbered"])
 
           java_import(
-            name = "#{@artifact_id}",
-            deps = #{pom.dependencies.map(&:label).inspect},
+            name = "#{@coordinates.artifact_id}",
+            deps = #{dependencies.map(&:label).inspect},
             jars = ["#{jar_name}"],
             srcjar = "#{srcjar_name}",
             visibility = ["//visibility:public"],
@@ -46,90 +103,39 @@ class Artifact
       end
     end
 
-    pom.dependencies.each do |artifact|
-      artifact.fetch(http_client)
+    dependencies.each do |project|
+      project.fetch(repository)
     end
   end
 
   def label
-    "//#{package_path}:#{@artifact_id}"
+    "//#{package_path}:#{@coordinates.artifact_id}"
   end
 
   private
 
   def package_path
-    "third_party/#{@artifact_id}"
-  end
-
-  def base_url
-    "/maven2/#{@group_id.gsub('.', '/')}/#{@artifact_id}/#{@version}"
-  end
-
-  def jar_name
-    "#{@artifact_id}-#{@version}.jar"
-  end
-
-  def srcjar_name
-    "#{@artifact_id}-#{@version}-sources.jar"
-  end
-
-  def jar_url
-    "#{base_url}/#{jar_name}"
-  end
-
-  def pom_url
-    "#{base_url}/#{@artifact_id}-#{@version}.pom"
-  end
-
-  def srcjar_url
-    "#{base_url}/#{srcjar_name}"
+    "third_party/#{@coordinates.group_id.gsub('.', '_')}"
   end
 end
 
-class Pom
-  def self.parse(xml)
-    new REXML::Document.new(xml)
-  end
-
-  def initialize(document)
-    @document = document
-  end
-
-  def dependencies
-    @dependencies ||= begin
-      @document.get_elements('project/dependencies/dependency').map do |dependency|
-        Artifact.new(
-          dependency.get_text('groupId').value,
-          dependency.get_text('artifactId').value,
-          dependency.get_text('version').value
-        )
-      end
-    end
-  end
-end
-
-class ThirdParty
-  WORKSPACE = File.expand_path('../..', __FILE__)
-
+class Repository
   def initialize
     @http = Net::HTTP.new('repo1.maven.org', 443)
     @http.use_ssl = true
+    @base = '/maven2'
   end
 
-  def run(artifact)
-    Dir.chdir(WORKSPACE) do
-      artifact.fetch(self)
-    end
-  end
-
-  def get(path)
-    $stderr.puts path
-    request = Net::HTTP::Get.new(path)
+  def get(coordinates)
+    request = Net::HTTP::Get.new(File.join(@base, coordinates.repository_path))
     response = @http.request(request)
-    response.body
+    Artifact.new(coordinates, response.body)
   end
 end
 
+
 if $0 == __FILE__
-  ThirdParty.new.run(Artifact.parse(ARGV.shift))
+  Dir.chdir(File.expand_path('../..', __FILE__)) do
+    Project.new(Coordinates.parse(ARGV.shift)).fetch(Repository.new)
+  end
 end

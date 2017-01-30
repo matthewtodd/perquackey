@@ -29,6 +29,8 @@ Using Android Studio to get the Android SDK here...
     * SDK Platform
     * Intel x86 Atom 64 System Image
     * Sources for Android SDK
+  * Extras
+    * Android Support Repository
 1. `bazel build //src:android`
 
 #### [Virtual Device](https://developer.android.com/studio/run/emulator.html)

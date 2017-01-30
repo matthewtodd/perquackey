@@ -35,9 +35,16 @@ class Coordinates
   end
 
   def self.parse_xml(dependency)
+    packaging = if type_element = dependency.get_text('type')
+                  type_element.value.to_sym
+                else
+                  :jar
+                end
+
     new(
       group_id: dependency.get_text('groupId').value,
       artifact_id: dependency.get_text('artifactId').value,
+      packaging: packaging,
       version: dependency.get_text('version').value
     )
   end
@@ -58,6 +65,10 @@ class Coordinates
     File.join(@group_id.gsub('.', '/'), @artifact_id, @version, basename)
   end
 
+  def to_s
+    [@group_id, @artifact_id, @packaging, @classifier, @version].compact.join(':')
+  end
+
   def with(packaging: @packaging, classifier: @classifier)
     self.class.new(
       group_id: @group_id,
@@ -75,7 +86,13 @@ class Project
   end
 
   def fetch(repository)
-    pom = repository.get(@coordinates.with(packaging: :pom)).as_xml.
+    pom = repository.get(@coordinates.with(packaging: :pom)).as_xml
+
+    packaging = if packaging_element = pom.get_text('project/packaging')
+                  packaging_element.value.to_sym
+                else
+                  :jar
+                end
 
     dependencies = pom.get_elements('project/dependencies/dependency').map do |dependency|
       Project.new(Coordinates.parse_xml(dependency))
@@ -85,22 +102,41 @@ class Project
     FileUtils.mkdir_p(package_path)
 
     Dir.chdir(package_path) do
-      jar_name = repository.get(@coordinates).write('wb')
-      srcjar_name = repository.get(@coordinates.with(classifier: :sources)).write('wb')
+      jar_name = repository.get(@coordinates.with(packaging: packaging)).write('wb')
+      srcjar_name = repository.get(@coordinates.with(packaging: :jar, classifier: :sources)).write('wb')
 
-      File.open('BUILD', 'w') do |io|
-        io.puts <<~END
-          licenses(["unencumbered"])
+      case packaging
+      when :aar
+        File.open('BUILD', 'w') do |io|
+          io.puts <<~END
+            licenses(["unencumbered"])
 
-          java_import(
-            name = "#{@coordinates.artifact_id}",
-            deps = #{dependencies.map(&:label).inspect},
-            jars = ["#{jar_name}"],
-            srcjar = "#{srcjar_name}",
-            visibility = ["//visibility:public"],
-          )
-        END
+            aar_import(
+              name = "#{@coordinates.artifact_id}",
+              deps = #{dependencies.map(&:label).inspect},
+              aar = "#{jar_name}",
+              visibility = ["//visibility:public"],
+            )
+          END
+        end
+      when :jar
+        File.open('BUILD', 'w') do |io|
+          io.puts <<~END
+            licenses(["unencumbered"])
+
+            java_import(
+              name = "#{@coordinates.artifact_id}",
+              deps = #{dependencies.map(&:label).inspect},
+              jars = ["#{jar_name}"],
+              srcjar = "#{srcjar_name}",
+              visibility = ["//visibility:public"],
+            )
+          END
+        end
+      else
+        fail 'Huh?'
       end
+
     end
 
     dependencies.each do |project|
@@ -115,11 +151,41 @@ class Project
   private
 
   def package_path
-    "third_party/#{@coordinates.group_id.gsub('.', '_')}"
+    "third_party/#{@coordinates.group_id.gsub('.', '_')}_#{@coordinates.artifact_id.gsub('-', '_')}"
   end
 end
 
-class Repository
+class Repositories
+  def initialize
+    @repositories = [
+      FileRepository.new(File.expand_path('../../third_party/android/sdk/extras/android/m2repository', __FILE__)),
+      HttpRepository.new
+    ]
+  end
+
+  def get(coordinates)
+    @repositories.each do |repository|
+      if artifact = repository.get(coordinates)
+        return artifact
+      end
+    end
+
+    fail "Artifact not found! #{coordinates}"
+  end
+end
+
+class FileRepository
+  def initialize(path)
+    @path = path
+  end
+
+  def get(coordinates)
+    path = File.join(@path, coordinates.repository_path)
+    Artifact.new(coordinates, IO.read(path)) if File.exist?(path)
+  end
+end
+
+class HttpRepository
   def initialize
     @http = Net::HTTP.new('repo1.maven.org', 443)
     @http.use_ssl = true
@@ -129,13 +195,12 @@ class Repository
   def get(coordinates)
     request = Net::HTTP::Get.new(File.join(@base, coordinates.repository_path))
     response = @http.request(request)
-    Artifact.new(coordinates, response.body)
+    Artifact.new(coordinates, response.body) if response.kind_of?(Net::HTTPSuccess)
   end
 end
 
-
 if $0 == __FILE__
   Dir.chdir(File.expand_path('../..', __FILE__)) do
-    Project.new(Coordinates.parse(ARGV.shift)).fetch(Repository.new)
+    Project.new(Coordinates.parse(ARGV.shift)).fetch(Repositories.new)
   end
 end

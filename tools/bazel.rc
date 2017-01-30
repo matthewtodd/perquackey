@@ -1,0 +1,3 @@
+# sandboxing doesn't work extracting aar_import dependencies.
+# TODO come back just here so I can file a bug.
+build --spawn_strategy=standalone

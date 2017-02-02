@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.matthewtodd.perquackey.android.instrumentation">
+
+  <instrumentation
+      android:functionalTest="true"
+      android:name="android.support.test.runner.AndroidJUnitRunner"
+      android:targetPackage="org.matthewtodd.perquackey.android.application" />
+
+</manifest>

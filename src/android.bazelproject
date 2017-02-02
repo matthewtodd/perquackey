@@ -1,0 +1,13 @@
+android_sdk_platform: 'android-22'
+
+directories:
+  src/main/java/org/matthewtodd/perquackey/android
+  src/test/java/org/matthewtodd/perquackey/android
+
+test_sources:
+  src/test
+
+targets:
+  //src/main/java/org/matthewtodd/perquackey/android/main:main
+  //src/test/java/org/matthewtodd/perquackey/android/application:application
+  //src/test/java/org/matthewtodd/perquackey/android/instrumentation:instrumentation

@@ -1,0 +1,663 @@
+#!/usr/bin/env ruby
+
+require 'minitest'
+require 'minitest/spec'
+require 'net/http'
+require 'optparse'
+require 'pathname'
+require 'rexml/document'
+require 'stringio'
+require 'uri'
+require 'webrick'
+require 'webrick/https'
+
+begin
+  gem 'minitest-rg', '~> 5.2'
+rescue Gem::LoadError
+  # No big deal.
+else
+  require 'minitest/rg'
+end
+
+# What I want over maven_jar is?
+# - dependency resolution (and this is big!)
+# - attaching source for the IDE (though this could be coming)
+# - aar support
+#
+# Problems here are?
+# - implementation cost
+# - checking in jars
+#
+# If I write something, I want to test it. This script is probably easier to
+# test than Skylark. (At least, I know how to do it.)
+#
+# I'm seeing a subcommand interface:
+#   third_party install junit:junit:4.12
+#     - note install / import terminology difference...
+#   third_party search guava
+#     - I really want this
+#     - possibly combine with install, so `third_party install -s guava`
+#   third_party cleanup
+#     - can probably use `bazel query rdeps()` to find unused
+#   third_party outdated
+#   third_party update
+#   third_party test
+#
+# And expanding to handle other dependencies, too? iOS, JS.
+class Main
+  def self.run(argv)
+    opts = OptionParser.new
+    opts.on('-t', '--test') { exit Minitest.run }
+    opts.order!(argv)
+    new(HttpRepository.at('https://repo1.maven.org/maven2'), FilesystemWorkspace.new).run(argv.shift)
+  end
+
+  def initialize(repository, workspace)
+    @repository = repository
+    @workspace = workspace
+  end
+
+  def run(coordinates)
+    Artifact.new(Coordinates.parse(coordinates), @repository).add_to @workspace
+  end
+end
+
+class Test < Minitest::Test
+  make_my_diffs_pretty!
+  parallelize_me!
+  include Minitest::Spec::DSL::InstanceMethods
+  def a; TestDataBuilders.new; end
+end
+
+class MainTest < Test
+  def setup
+    @repository = Hash.new { |h, k| h[k] = "These are the (obviously fake) contents of the artifact at #{k}." }
+    @workspace = {}
+    @main = Main.new(@repository, @workspace)
+  end
+
+  def test_vendoring_a_jar_and_its_dependencies
+    @repository['org/example/foo/1.0/foo-1.0.pom'] = a.pom.with_dependency('org.example:bar:1.0').build
+    @repository['org/example/foo/1.0/foo-1.0.jar'] = 'JAR'
+    @repository['org/example/foo/1.0/foo-1.0-sources.jar'] = 'SOURCES'
+
+    @main.run('org.example:foo:1.0')
+
+    package = BuildFile.parse(@workspace['third_party/org_example/BUILD'])
+    expect(package.target(:foo).rule).must_equal :java_import
+    expect(package.target(:foo).attribute(:deps)).must_equal ['//third_party/org_example:bar']
+    expect(package.target(:foo).attribute(:jars)).must_equal ['foo-1.0.jar']
+    expect(package.target(:foo).attribute(:srcjar)).must_equal 'foo-1.0-sources.jar'
+    expect(@workspace['third_party/org_example/foo-1.0.jar']).must_equal 'JAR'
+    expect(@workspace['third_party/org_example/foo-1.0-sources.jar']).must_equal 'SOURCES'
+    expect(package.target(:bar)).wont_be_nil
+    expect(@workspace['third_party/org_example/bar-1.0.jar']).wont_be_nil
+    expect(@workspace['third_party/org_example/bar-1.0-sources.jar']).wont_be_nil
+  end
+end
+
+class HttpRepository
+  def self.at(uri)
+    uri = URI.parse(uri)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = uri.scheme == 'https'
+    new http, uri.path
+  end
+
+  def initialize(http, base, log: $stderr)
+    @http = http
+    # TODO separate diagnostic logging from non-success reporting.
+    # @http.set_debug_output(log)
+    @base = base
+    @log = log
+  end
+
+  def [](path)
+    request = Net::HTTP::Get.new(File.join(@base, path))
+    response = begin
+                 @http.request(request)
+               rescue => e
+                 @log << e.message << " at " << e.backtrace.first << "\n"
+                 return nil
+               end
+
+    if response.kind_of?(Net::HTTPSuccess)
+      response.body
+    else
+      @log << "[#{response.code}] https://#{@http.address}#{request.path}\n"
+      nil
+    end
+  end
+end
+
+class HttpRepositoryTest < Test
+  def setup
+    @log = StringIO.new
+    @server = FakeArtifactServer.new(Colored.blue(@log))
+    @server.start
+    http = Net::HTTP.new('localhost', @server.port)
+    http.cert_store = OpenSSL::X509::Store.new
+    http.cert_store.add_cert(@server.ssl_certificate)
+    http.use_ssl = true
+    @repository = HttpRepository.new(http, '/base', log: Colored.cyan(@log))
+  end
+
+  def teardown
+    @server.shutdown
+  end
+
+  def test_get_ok
+    @server['/base/thing'] = 'CONTENTS'
+    expect(@repository['thing']).must_equal 'CONTENTS', @log.string
+  end
+
+  def test_get_not_found
+    expect(@repository['unheard-of-thing']).must_be_nil @log.string
+  end
+end
+
+class Colored
+  def self.blue(log)
+    new 34, log
+  end
+
+  def self.cyan(log)
+    new 36, log
+  end
+
+  def initialize(color, log)
+    @color = color
+    @log = log
+  end
+
+  def <<(message)
+    @log << "\e[#{@color}m#{message}\e[39m"
+    self
+  end
+end
+
+class FakeArtifactServer
+  def initialize(log)
+    @artifacts = {}
+
+    key = OpenSSL::PKey::RSA.new(1024) # Weak, but faster for tests.
+
+    @ssl_certificate = OpenSSL::X509::Certificate.new.tap do |cert|
+      cert.subject = OpenSSL::X509::Name.parse('CN=localhost')
+      cert.issuer = cert.subject
+      cert.public_key = key.public_key
+      cert.not_before = Time.now
+      cert.not_after = cert.not_before + 60 # 1 minute
+      cert.sign key, OpenSSL::Digest::SHA256.new
+    end
+
+    @server = WEBrick::HTTPServer.new(
+      BindAddress: '127.0.0.1',
+      Port: 0,
+      AccessLog: [[log, WEBrick::AccessLog::COMMON_LOG_FORMAT]],
+      Logger: WEBrick::Log.new(log, WEBrick::Log::DEBUG),
+      SSLEnable: true,
+      SSLCertificate: @ssl_certificate,
+      SSLPrivateKey: key
+    )
+
+    @server.mount_proc('/') do |request, response|
+      if @artifacts.key?(request.path)
+        response.body = @artifacts[request.path]
+      else
+        response.status = 404
+      end
+    end
+  end
+
+  def []=(path, contents)
+    @artifacts[path] = contents
+  end
+
+  def port
+    @server.listeners.first.addr[1]
+  end
+
+  def ssl_certificate
+    @ssl_certificate
+  end
+
+  def start
+    Thread.new { @server.start }
+    loop until @server.status == :Running
+  end
+
+  def shutdown
+    @server.shutdown
+  end
+end
+
+class FilesystemWorkspace
+  def initialize
+    @root = Pathname.new(File.expand_path('../..', __FILE__))
+  end
+
+  def [](path)
+    path = @root.join(path)
+    path.read if path.exist?
+  end
+
+  def []=(path, contents)
+    path = @root.join(path)
+    path.parent.mkpath
+    path.open('w') { |io| io.write(contents) }
+  end
+end
+
+# TODO integration test FilesystemWorkspace
+
+class Coordinates
+  # g:a:v
+  # g:a:p:v
+  # g:a:p:c:v
+  def self.parse(string)
+    components = string.split(':')
+
+    group_id = components.shift
+    artifact_id = components.shift
+    version = components.pop
+    packaging = components.shift || :jar
+    classifier = components.shift
+
+    new(group_id, artifact_id, packaging, classifier, version)
+  end
+
+  def initialize(group_id, artifact_id, packaging, classifier, version)
+    @group_id = group_id
+    @artifact_id = artifact_id
+    @packaging = packaging
+    @classifier = classifier
+    @version = version
+  end
+
+  def format(format_string)
+    format_string.
+      gsub('%g', @group_id).
+      gsub('%G', @group_id.gsub('.', '/')).
+      gsub('%H', @group_id.gsub('.', '_')).
+      gsub('%a', @artifact_id).
+      gsub('%A', artifact_name).
+      gsub('%v', @version).
+      to_s
+  end
+
+  def pom
+    Coordinates.new(@group_id, @artifact_id, :pom, nil, @version)
+  end
+
+  def sources
+    Coordinates.new(@group_id, @artifact_id, :jar, :sources, @version)
+  end
+
+  def ==(other)
+    self.instance_variables.map { |name| self.instance_variable_get(name) } == other.instance_variables.map { |name| other.instance_variable_get(name) }
+  end
+
+  private
+
+  def artifact_name
+    [@artifact_id, @version, @classifier].compact.map(&:to_s).join('-').concat('.').concat(@packaging.to_s)
+  end
+end
+
+class CoordinatesTest < Test
+  def test_format_a
+    expect(Coordinates.parse('org.example:foo:1.0').format('%a')).must_equal 'foo'
+  end
+
+  def test_format_A
+    expect(Coordinates.parse('org.example:foo:1.0').format('%A')).must_equal 'foo-1.0.jar'
+  end
+
+  def test_format_A_with_packaging
+    expect(Coordinates.parse('org.example:foo:pom:1.0').format('%A')).must_equal 'foo-1.0.pom'
+  end
+
+  def test_format_A_with_packaging_and_classifier
+    expect(Coordinates.parse('org.example:foo:jar:sources:1.0').format('%A')).must_equal 'foo-1.0-sources.jar'
+  end
+
+  def test_format_g
+    expect(Coordinates.parse('org.example:foo:1.0').format('%g')).must_equal 'org.example'
+  end
+
+  def test_format_G
+    expect(Coordinates.parse('org.example:foo:1.0').format('%G')).must_equal 'org/example'
+  end
+
+  def test_format_H
+    expect(Coordinates.parse('org.example:foo:1.0').format('%H')).must_equal 'org_example'
+  end
+
+  def test_format_v
+    expect(Coordinates.parse('org.example:foo:1.0').format('%v')).must_equal '1.0'
+  end
+end
+
+class Artifact
+  def initialize(coordinates, repository)
+    @coordinates = coordinates
+    @repository = repository
+  end
+
+  def add_to(workspace)
+    package = BuildFile.parse(workspace[format('third_party/%H/BUILD')]).to_builder
+
+    package.java_import(
+      name: format('%a'),
+      deps: dependencies.map { |dependency| dependency.format('//third_party/%H:%a') },
+      jars: [format('%A')],
+      srcjar: sources.contents ? sources.format('%A') : nil,
+      visibility: ['//visibility:public']
+    )
+
+    workspace[format('third_party/%H/BUILD')] = package.build.contents
+    workspace[format('third_party/%H/%A')] = contents
+    workspace[sources.format('third_party/%H/%A')] = sources.contents if sources.contents
+
+    dependencies.each { |dependency| dependency.add_to(workspace) }
+  end
+
+  def contents
+    @repository[format('%G/%a/%v/%A')]
+  end
+
+  # FIXME this could probably go away if Artifact starts acting on Package?
+  def format(format_string)
+    @coordinates.format(format_string)
+  end
+
+  private
+
+  def dependencies
+    Pom.new(@coordinates.pom, @repository).dependencies.map { |coordinates| Artifact.new(coordinates, @repository) }
+  end
+
+  def sources
+    Artifact.new(@coordinates.sources, @repository)
+  end
+end
+
+class ArtifactTest < Test
+  def test_add_to_workspace_without_sources
+    repository = {}
+    workspace = {}
+
+    Artifact.new(Coordinates.parse('org.example:foo:1.0'), repository).add_to workspace
+
+    package = BuildFile.parse(workspace['third_party/org_example/BUILD'])
+    expect(package.target(:foo).attribute(:srcjar)).must_be_nil
+    expect(workspace.key?('third_party/org_example/foo-1.0-sources.jar')).must_equal false
+  end
+
+  def test_contents
+    expect(Artifact.new(Coordinates.parse('org.example:foo:1.0'), { 'org/example/foo/1.0/foo-1.0.jar' => 'JAR' }).contents).must_equal 'JAR'
+  end
+end
+
+# FIXME duplication here. Want "hash of text of child elements" and "build coordinates from said hash." Also don't need so much public behavior.
+class Pom
+  def initialize(coordinates, repository)
+    @coordinates = coordinates
+    @repository = repository
+    @document = REXML::Document.new @repository[@coordinates.format('%G/%a/%v/%A')]
+  end
+
+  def dependencies
+    @document.enum_for(:each_element, 'project/dependencies/dependency').map do |dependency|
+      group_id = dependency.get_text('groupId').to_s
+      artifact_id = dependency.get_text('artifactId').to_s
+      version = (dependency.get_text('version') || Pom.new(parent, @repository).dependency_management_version_for(group_id, artifact_id)).to_s
+
+      Coordinates.new(group_id, artifact_id, :jar, nil, version)
+    end
+  end
+
+  def dependency_management_version_for(group_id, artifact_id)
+    @document.enum_for(:each_element, 'project/dependencyManagement/dependencies/dependency').
+      select { |dependency| dependency.get_text('groupId').to_s == group_id && dependency.get_text('artifactId').to_s == artifact_id }.
+      collect { |dependency| dependency.get_text('version').to_s }.
+      first
+  end
+
+  def parent
+    @document.enum_for(:each_element, 'project/parent').
+      collect { |parent| Coordinates.new(parent.get_text('groupId').to_s, parent.get_text('artifactId').to_s, :pom, nil, parent.get_text('version').to_s) }.
+      first
+  end
+end
+
+class PomTest < Test
+  def test_dependencies_empty
+    expect(Pom.new(Coordinates.parse('org.example:foo:1.0').pom, { 'org/example/foo/1.0/foo-1.0.pom' => a.pom.build }).dependencies).must_equal []
+  end
+
+  def test_dependencies
+    expect(Pom.new(Coordinates.parse('org.example:foo:1.0').pom, { 'org/example/foo/1.0/foo-1.0.pom' => a.pom.with_dependency('org.example:bar:1.0').build }).dependencies).must_equal [
+      Coordinates.parse('org.example:bar:1.0')
+    ]
+  end
+
+  def test_dependencies_with_versions_in_parent_pom
+    coordinates = Coordinates.parse('org.example:foo:1.0').pom
+
+    repository = {
+      'org/example/foo-parent/1.0/foo-parent-1.0.pom' => a.pom.with_dependency_management('org.example:bar:1.0').build,
+      'org/example/foo/1.0/foo-1.0.pom' => a.pom.with_parent('org.example:foo-parent:1.0').with_dependency('org.example:bar').build
+    }
+
+    expect(Pom.new(coordinates, repository).dependencies).must_equal [
+      Coordinates.parse('org.example:bar:1.0')
+    ]
+  end
+end
+
+class BuildFile
+  def self.builder
+    Builder.new
+  end
+
+  def self.parse(contents)
+    builder.parse(contents).build
+  end
+
+  def initialize(targets)
+    @targets = targets
+  end
+
+  def target(name)
+    @targets.fetch(name.to_s)
+  end
+
+  def to_builder
+    Builder.new(@targets)
+  end
+
+  def contents
+    @targets.values.join("\n\n")
+  end
+
+  private
+
+  class Builder
+    def initialize(targets = {})
+      @targets = targets
+    end
+
+    def parse(contents)
+      instance_eval contents.to_s.gsub(/\s*=/, ':')
+      self
+    end
+
+    def java_import(**attributes)
+      @targets[attributes.fetch(:name)] = Target.new(:java_import, attributes)
+      self
+    end
+
+    def build
+      BuildFile.new(@targets)
+    end
+  end
+
+  class Target
+    attr_reader :rule
+
+    def initialize(rule, attributes)
+      @rule = rule
+      @attributes = attributes
+    end
+
+    def attribute(name)
+      @attributes[name]
+    end
+
+    def to_s
+      "#{@rule}(\n#{format_attributes}\n)"
+    end
+
+    private
+
+    def format_attributes
+      @attributes.
+        map { |name, value| format_attribute(name, value) }.
+        compact.
+        join("\n")
+    end
+
+    def format_attribute(name, value)
+      if value.respond_to? :to_a
+        value = value.to_a
+        case value.length
+        when 0
+          nil
+        when 1
+          "  #{name} = #{value.inspect},"
+        else
+          "  #{name} = [\n    #{value.map(&:inspect).join(",\n    ")},\n  ],"
+        end
+
+      else
+        "  #{name} = #{value.inspect},"
+      end
+    end
+  end
+end
+
+class BuildFileTest < Test
+  def test_parse_roundtrip
+    expect(BuildFile.parse('java_import(name = "foo")').contents).must_equal <<~BUILD.strip
+      java_import(
+        name = "foo",
+      )
+    BUILD
+  end
+
+  def test_excluding_empty_arrays
+    expect(BuildFile.builder.java_import(name: 'foo', deps: %w()).build.contents).must_equal <<~BUILD.strip
+      java_import(
+        name = "foo",
+      )
+    BUILD
+  end
+
+  def test_formatting_single_item_arrays
+    expect(BuildFile.builder.java_import(name: 'foo', deps: %w(a)).build.contents).must_equal <<~BUILD.strip
+      java_import(
+        name = "foo",
+        deps = ["a"],
+      )
+    BUILD
+  end
+
+  def test_formatting_multiple_item_arrays
+    expect(BuildFile.builder.java_import(name: 'foo', deps: %w(a b c)).build.contents).must_equal <<~BUILD.strip
+      java_import(
+        name = "foo",
+        deps = [
+          "a",
+          "b",
+          "c",
+        ],
+      )
+    BUILD
+  end
+end
+
+class TestDataBuilders
+  def pom
+    PomBuilder.new
+  end
+
+  private
+
+  class PomBuilder
+    def initialize
+      @dependency_management_dependencies = []
+      @dependencies = []
+      @parent = {}
+    end
+
+    def with_dependency(coordinates)
+      @dependencies << parse_coordinates(coordinates)
+      self
+    end
+
+    def with_dependency_management(coordinates)
+      @dependency_management_dependencies << parse_coordinates(coordinates)
+      self
+    end
+
+    def with_parent(coordinates)
+      @parent = parse_coordinates(coordinates)
+      self
+    end
+
+    def build
+      pom = REXML::Document.new('<project/>')
+
+      if @parent.any?
+        add_coordinates(@parent, REXML::Element.new('parent', pom.root))
+      end
+
+      if @dependency_management_dependencies.any?
+        add_dependencies(@dependency_management_dependencies, REXML::Element.new('dependencyManagement', pom.root))
+      end
+
+      if @dependencies.any?
+        add_dependencies(@dependencies, pom.root)
+      end
+
+      buffer = StringIO.new
+      pom.write(buffer)
+      buffer.string
+    end
+
+    private
+
+    def add_coordinates(attributes, parent)
+      attributes.each do |key, value|
+        REXML::Element.new(key.to_s.gsub(/_(\w)/) { $1.upcase }, parent).add_text(value)
+      end
+    end
+
+    def add_dependencies(dependencies, parent)
+      REXML::Element.new('dependencies', parent).tap do |dependencies_el|
+        dependencies.each do |dependency|
+          add_coordinates(dependency, REXML::Element.new('dependency', dependencies_el))
+        end
+      end
+    end
+
+    def parse_coordinates(coordinates)
+      group_id, artifact_id, version = coordinates.split(':')
+      { group_id: group_id, artifact_id: artifact_id, version: version }
+    end
+  end
+end
+
+Main.run(ARGV) if $0 == __FILE__

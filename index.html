@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Perquackey</title>
+    <style>
+      body {
+        margin: 0 auto 5em;
+        width: 45em;
+      }
+      section {
+        margin-bottom: 1em;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      tbody tr:nth-child(5) td {
+        border-bottom: 1px dashed #ccc;
+      }
+      td, th {
+        padding-right: 1em;
+      }
+      footer {
+        background-color: #eee;
+        padding: 1em;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Perquackey</h1>
+    </header>
+
+    <!--
+    <section>
+      <form action="/" method="post">
+        <input name="letters"
+       autocomplete="off"
+          autofocus="on"
+          maxlength="13"
+            pattern="[a-z]{10}([a-z]{3})?"
+        placeholder="Enter your letters here."
+           required="on"
+               size="30"
+              title="Perquackey rolls are 10 or 13 letters."
+              value="<%= letters %>"
+        />
+      </form>
+    </section>
+    -->
+
+    <!--
+    <section>
+      <table>
+        <thead>
+          <tr>
+            <% words.headers.each do |header| %>
+              <th><%= header %></th>
+            <% end %>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% words.each do |row| %>
+            <tr>
+              <% row.each do |word| %>
+                <td><%= word %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
+    -->
+
+    <footer>
+      <!--
+      <p>
+        Enter the letters you rolled to see what you could have spelled.
+      </p>
+      <p>
+        Examples:
+        <a href="/eehhhijjoopqt">eehhhijjoopqt</a>,
+        <a href="/aaddeginoprsw">aaddeginoprsw</a>
+      </p>
+      -->
+      <p>
+        These words are taken from
+        <a href="http://en.wikipedia.org/wiki/Tournament_Word_List">TWL06, the official word list</a>
+        for Scrabble tournaments in North America. (You can
+        <a href="http://www.isc.ro/en/commands/lists.html">download this list</a>
+        from the Internet Scrabble Club.)
+      </p>
+      <p>
+        <a href="https://github.com/matthewtodd/perquackey">This code is on GitHub</a>.
+        Patches welcome!
+      </p>
+    </footer>
+  </body>
+</html>

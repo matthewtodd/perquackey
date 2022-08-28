@@ -6,11 +6,32 @@
     <title>Perquackey</title>
     <style>
       body {
-        margin: 0 auto 5em;
-        width: 45em;
+        background-color: #eee;
+        margin: 0;
       }
-      section {
-        margin-bottom: 1em;
+      header, section, footer {
+        padding: 1rem;
+      }
+      header, section {
+        background-color: #fff;
+      }
+      h1 {
+        font-size: 2rem;
+        margin: 0;
+      }
+      form {
+        margin: 0;
+      }
+      input {
+        background-color: transparent;
+        border: 0;
+        box-sizing: border-box;
+        font-family: inherit;
+        font-size: 2rem;
+        margin: 0;
+        outline: 0;
+        padding: 0;
+        width: 100%;
       }
       table {
         border-collapse: collapse;
@@ -79,9 +100,6 @@
         const search = new URLSearchParams(e.target.location.search);
         const letters = search.get("q") || '';
 
-        // TODO I want the iOS Safari keyboard to show, but these aren't working.
-        $input.focus();
-        $input.click();
         $input.value = letters;
 
         e.target.dispatchEvent(
@@ -96,20 +114,17 @@
 
   <body>
     <header>
-      <h1>Perquackey</h1>
-    </header>
-
-    <section>
       <form>
         <input name="letters"
        autocomplete="off"
+        autocorrect="off"
           autofocus="on"
           maxlength="13"
-        placeholder="Enter your letters here."
-               size="30"
+        placeholder="🎲 What did you roll?"
+         spellcheck="false"
         />
       </form>
-    </section>
+    </header>
 
     <section id="words">
       <table>
@@ -120,7 +135,7 @@
 
     <footer>
       <p>
-        Enter the letters you rolled to see what you could have spelled.
+        Type the letters you rolled to see what you could have spelled.
       </p>
       <p>
         Examples:

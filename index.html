@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Perquackey</title>
     <style>
       body {
@@ -78,6 +79,9 @@
         const search = new URLSearchParams(e.target.location.search);
         const letters = search.get("q") || '';
 
+        // TODO I want the iOS Safari keyboard to show, but these aren't working.
+        $input.focus();
+        $input.click();
         $input.value = letters;
 
         e.target.dispatchEvent(

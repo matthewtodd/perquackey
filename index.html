@@ -25,6 +25,33 @@
         padding: 1em;
       }
     </style>
+    <script type="module">
+      import Dictionary from "./dictionary.mjs";
+      import words from "./words.mjs";
+
+      const dictionary = new Dictionary(words);
+      const $input = document.querySelector("input[name=letters]");
+      const $wordList = document.querySelector("#words ul");
+
+      $input.addEventListener("keyup", (e) => {
+        e.target.dispatchEvent(
+          new CustomEvent("letters", {
+            bubbles: true,
+            detail: { letters: e.target.value }
+          })
+        );
+      });
+
+      document.addEventListener("letters", (e) => {
+        $wordList.innerHTML = "";
+
+        for (const word of dictionary.lookup(e.detail.letters)) {
+          const item = document.createElement("li");
+          item.appendChild(document.createTextNode(word));
+          $wordList.appendChild(item);
+        }
+      });
+    </script>
   </head>
 
   <body>
@@ -32,59 +59,32 @@
       <h1>Perquackey</h1>
     </header>
 
-    <!--
     <section>
-      <form action="/" method="post">
+      <form>
         <input name="letters"
        autocomplete="off"
           autofocus="on"
           maxlength="13"
-            pattern="[a-z]{10}([a-z]{3})?"
         placeholder="Enter your letters here."
-           required="on"
                size="30"
-              title="Perquackey rolls are 10 or 13 letters."
-              value="<%= letters %>"
         />
       </form>
     </section>
-    -->
 
-    <!--
-    <section>
-      <table>
-        <thead>
-          <tr>
-            <% words.headers.each do |header| %>
-              <th><%= header %></th>
-            <% end %>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% words.each do |row| %>
-            <tr>
-              <% row.each do |word| %>
-                <td><%= word %></td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+    <section id="words">
+      <ul>
+      </ul>
     </section>
-    -->
 
     <footer>
-      <!--
       <p>
         Enter the letters you rolled to see what you could have spelled.
       </p>
-      <p>
-        Examples:
-        <a href="/eehhhijjoopqt">eehhhijjoopqt</a>,
-        <a href="/aaddeginoprsw">aaddeginoprsw</a>
-      </p>
-      -->
+      <!-- <p> -->
+      <!--   Examples: -->
+      <!--   <a href="/eehhhijjoopqt">eehhhijjoopqt</a>, -->
+      <!--   <a href="/aaddeginoprsw">aaddeginoprsw</a> -->
+      <!-- </p> -->
       <p>
         These words are taken from
         <a href="http://en.wikipedia.org/wiki/Tournament_Word_List">TWL06, the official word list</a>

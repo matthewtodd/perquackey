@@ -45,10 +45,12 @@
       });
 
       document.addEventListener("letters", (e) => {
+        const letters = e.detail.letters.toLowerCase().split('').sort().join('');
+
         $headers.innerHTML = "";
         $rows.innerHTML = "";
 
-        const table = new Table(dictionary.lookup(e.detail.letters));
+        const table = new Table(dictionary.lookup(letters));
 
         const $tr = document.createElement("tr");
         for (const header of table.headers) {
@@ -67,6 +69,23 @@
           }
           $rows.appendChild($tr);
         }
+
+        const search = (letters.length > 0) ? `?q=${letters}` : '';
+        history.replaceState(null, '', `${document.location.pathname}${search}`);
+      });
+
+      window.addEventListener("load", (e) => {
+        const search = new URLSearchParams(e.target.location.search);
+        const letters = search.get("q") || '';
+
+        $input.value = letters;
+
+        e.target.dispatchEvent(
+          new CustomEvent("letters", {
+            bubbles: true,
+            detail: { letters: letters }
+          })
+        );
       });
     </script>
   </head>
@@ -99,11 +118,11 @@
       <p>
         Enter the letters you rolled to see what you could have spelled.
       </p>
-      <!-- <p> -->
-      <!--   Examples: -->
-      <!--   <a href="/eehhhijjoopqt">eehhhijjoopqt</a>, -->
-      <!--   <a href="/aaddeginoprsw">aaddeginoprsw</a> -->
-      <!-- </p> -->
+      <p>
+        Examples:
+        <a href="?q=eehhhijjoopqt">eehhhijjoopqt</a>,
+        <a href="?q=aaddeginoprsw">aaddeginoprsw</a>
+      </p>
       <p>
         These words are taken from
         <a href="http://en.wikipedia.org/wiki/Tournament_Word_List">TWL06, the official word list</a>

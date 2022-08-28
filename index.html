@@ -27,11 +27,13 @@
     </style>
     <script type="module">
       import Dictionary from "./dictionary.mjs";
+      import Table from "./table.mjs";
       import words from "./words.mjs";
 
       const dictionary = new Dictionary(words);
       const $input = document.querySelector("input[name=letters]");
-      const $wordList = document.querySelector("#words ul");
+      const $headers = document.querySelector("#words table thead");
+      const $rows = document.querySelector("#words table tbody");
 
       $input.addEventListener("keyup", (e) => {
         e.target.dispatchEvent(
@@ -43,12 +45,27 @@
       });
 
       document.addEventListener("letters", (e) => {
-        $wordList.innerHTML = "";
+        $headers.innerHTML = "";
+        $rows.innerHTML = "";
 
-        for (const word of dictionary.lookup(e.detail.letters)) {
-          const item = document.createElement("li");
-          item.appendChild(document.createTextNode(word));
-          $wordList.appendChild(item);
+        const table = new Table(dictionary.lookup(e.detail.letters));
+
+        const $tr = document.createElement("tr");
+        for (const header of table.headers) {
+          const $th = document.createElement("th");
+          $th.appendChild(document.createTextNode(header));
+          $tr.appendChild($th);
+        }
+        $headers.appendChild($tr);
+
+        for (const row of table.rows) {
+          const $tr = document.createElement("tr");
+          for (const word of row) {
+            const $td = document.createElement("td");
+            $td.appendChild(document.createTextNode(word));
+            $tr.appendChild($td);
+          }
+          $rows.appendChild($tr);
         }
       });
     </script>
@@ -72,8 +89,10 @@
     </section>
 
     <section id="words">
-      <ul>
-      </ul>
+      <table>
+        <thead></thead>
+        <tbody></tbody>
+      </table>
     </section>
 
     <footer>

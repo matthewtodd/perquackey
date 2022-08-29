@@ -54,47 +54,8 @@
 
       const dictionary = new Dictionary(words);
       const $input = document.querySelector("input[name=letters]");
-      const $headers = document.querySelector("#words table thead");
+      const $headers = document.querySelector("#words table thead tr");
       const $rows = document.querySelector("#words table tbody");
-
-      $input.addEventListener("keyup", (e) => {
-        e.target.dispatchEvent(
-          new CustomEvent("letters", {
-            bubbles: true,
-            detail: { letters: e.target.value }
-          })
-        );
-      });
-
-      document.addEventListener("letters", (e) => {
-        const letters = e.detail.letters.toLowerCase().split('').sort().join('');
-
-        $headers.innerHTML = "";
-        $rows.innerHTML = "";
-
-        const table = new Table(dictionary.lookup(letters));
-
-        const $tr = document.createElement("tr");
-        for (const header of table.headers) {
-          const $th = document.createElement("th");
-          $th.appendChild(document.createTextNode(header));
-          $tr.appendChild($th);
-        }
-        $headers.appendChild($tr);
-
-        for (const row of table.rows) {
-          const $tr = document.createElement("tr");
-          for (const word of row) {
-            const $td = document.createElement("td");
-            $td.appendChild(document.createTextNode(word));
-            $tr.appendChild($td);
-          }
-          $rows.appendChild($tr);
-        }
-
-        const search = (letters.length > 0) ? `?q=${letters}` : '';
-        history.replaceState(null, '', `${document.location.pathname}${search}`);
-      });
 
       window.addEventListener("load", (e) => {
         const search = new URLSearchParams(e.target.location.search);
@@ -108,6 +69,66 @@
             detail: { letters: letters }
           })
         );
+      });
+
+      $input.addEventListener("keyup", (e) => {
+        e.target.dispatchEvent(
+          new CustomEvent("letters", {
+            bubbles: true,
+            detail: { letters: e.target.value }
+          })
+        );
+      });
+
+      document.addEventListener("letters", (e) => {
+        const letters = e.detail.letters.toLowerCase().split('').sort().join('');
+        const table = new Table(dictionary.lookup(letters));
+
+        // Build / diff the header row.
+        {
+          // Add
+          while (table.headers.length > $headers.children.length) {
+            $headers.appendChild(document.createElement("th"));
+          }
+          // Update
+          for (var i = 0; i < table.headers.length; i++) {
+            $headers.children[i].innerText = table.headers[i];
+          }
+          // Delete
+          while (table.headers.length < $headers.children.length) {
+            $headers.lastElementChild.remove();
+          }
+        }
+
+        // Build / diff the body rows.
+        {
+          // Add
+          while (table.rows.length > $rows.children.length) {
+            $rows.appendChild(document.createElement("tr"));
+          }
+          // Update
+          for (var i = 0; i < table.rows.length; i++) {
+            // Add
+            while (table.rows[i].length > $rows.children[i].children.length) {
+              $rows.children[i].appendChild(document.createElement("td"));
+            }
+            // Update
+            for (var j = 0; j < table.rows[i].length; j++) {
+              $rows.children[i].children[j].innerText = table.rows[i][j];
+            }
+            // Delete
+            while (table.rows[i].length < $rows.children[i].children.length) {
+              $rows.children[i].lastElementChild.remove();
+            }
+          }
+          // Delete
+          while (table.rows.length < $rows.children.length) {
+            $rows.lastElementChild.remove();
+          }
+        }
+
+        const search = (letters.length > 0) ? `?q=${letters}` : '';
+        history.replaceState(null, '', `${document.location.pathname}${search}`);
       });
     </script>
   </head>
@@ -128,7 +149,7 @@
 
     <section id="words">
       <table>
-        <thead></thead>
+        <thead><tr></tr></thead>
         <tbody></tbody>
       </table>
     </section>

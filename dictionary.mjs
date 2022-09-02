@@ -2,9 +2,10 @@ import Fingerprint from './fingerprint.mjs'
 
 export default class Dictionary {
   constructor(words) {
+    // Indexing by fingerprint doesn't help much: in our word list, there are
+    // 135,042 distinct words with 117,881 distinct fingerprints.
     this.words = {};
 
-    // TODO consider first indexing by fingerprint?
     words.forEach((word) => {
       this.words[word] = new Fingerprint(word);
     });

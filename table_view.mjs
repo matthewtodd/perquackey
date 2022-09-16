@@ -1,12 +1,16 @@
 export default class TableView {
-  constructor(document, $table) {
-    this.document = document;
+  constructor($table) {
+    this.document = $table.ownerDocument;
     this.$table = $table;
   }
 
   update(table) {
-    const $headers = this.$table.querySelector("thead tr");
-    const $rows = this.$table.querySelector("tbody");
+    console.time("render -> fragment");
+    const fragment = this.document.createDocumentFragment();
+    fragment.appendChild(this.$table.cloneNode(true));
+
+    const $headers = fragment.querySelector("thead tr");
+    const $rows = fragment.querySelector("tbody");
 
     // Build / diff the header row.
     {
@@ -16,7 +20,7 @@ export default class TableView {
       }
       // Update
       for (var i = 0; i < table.headers.length; i++) {
-        $headers.children[i].innerText = table.headers[i];
+        $headers.children[i].textContent = table.headers[i];
       }
       // Delete
       while (table.headers.length < $headers.children.length) {
@@ -38,7 +42,7 @@ export default class TableView {
         }
         // Update
         for (var j = 0; j < table.rows[i].length; j++) {
-          $rows.children[i].children[j].innerText = table.rows[i][j];
+          $rows.children[i].children[j].textContent = table.rows[i][j];
         }
         // Delete
         while (table.rows[i].length < $rows.children[i].children.length) {
@@ -50,5 +54,12 @@ export default class TableView {
         $rows.lastElementChild.remove();
       }
     }
+    console.timeEnd("render -> fragment");
+
+    console.time("render -> replace");
+    const $newTable = fragment.querySelector("table");
+    this.$table.replaceWith(fragment);
+    this.$table = $newTable;
+    console.timeEnd("render -> replace");
   }
 }

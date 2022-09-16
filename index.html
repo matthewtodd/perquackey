@@ -55,7 +55,7 @@
 
       const dictionary = new Dictionary(words);
       const $input = document.querySelector("input[name=letters]");
-      const tableView = new TableView(document, document.querySelector("#words table"));
+      const tableView = new TableView(document.querySelector("#words table"));
 
       window.addEventListener("load", (e) => {
         const search = new URLSearchParams(e.target.location.search);
@@ -82,8 +82,15 @@
 
       document.addEventListener("letters", (e) => {
         const letters = e.detail.letters.toLowerCase().split('').sort().join('');
+
+        console.time("lookup");
         const table = new Table(dictionary.lookup(letters));
+        console.timeEnd("lookup");
+
+        console.time("render");
         tableView.update(table);
+        console.timeEnd("render");
+
         const search = (letters.length > 0) ? `?q=${letters}` : '';
         history.replaceState(null, '', `${document.location.pathname}${search}`);
       });

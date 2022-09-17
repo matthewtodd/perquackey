@@ -36,11 +36,9 @@
       table {
         border-collapse: collapse;
       }
-      tbody tr:nth-child(5) td {
-        border-bottom: 1px dashed #ccc;
-      }
       td, th {
         padding-right: 1em;
+        vertical-align: top;
       }
       footer {
         background-color: #eee;
@@ -49,13 +47,13 @@
     </style>
     <script type="module">
       import Dictionary from "./dictionary.mjs";
-      import Table from "./table.mjs";
-      import TableView from "./table_view.mjs";
+      import List from "./list.mjs";
+      import ListView from "./list_view.mjs";
       import words from "./words.mjs";
 
       const dictionary = new Dictionary(words);
       const $input = document.querySelector("input[name=letters]");
-      const tableView = new TableView(document.querySelector("#words table"));
+      const listView = new ListView(document.querySelector("#words table"));
 
       window.addEventListener("load", (e) => {
         const search = new URLSearchParams(e.target.location.search);
@@ -84,11 +82,11 @@
         const letters = e.detail.letters.toLowerCase().split('').sort().join('');
 
         console.time("lookup");
-        const table = new Table(dictionary.lookup(letters));
+        const words = dictionary.lookup(letters);
         console.timeEnd("lookup");
 
         console.time("render");
-        tableView.update(table);
+        listView.update(new List(words));
         console.timeEnd("render");
 
         const search = (letters.length > 0) ? `?q=${letters}` : '';
@@ -114,7 +112,7 @@
     <section id="words">
       <table>
         <thead><tr></tr></thead>
-        <tbody></tbody>
+        <tbody><tr></tr></tbody>
       </table>
     </section>
 

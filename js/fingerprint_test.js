@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import Fingerprint from './fingerprint.mjs'
+import Fingerprint from './fingerprint.js'
 
 describe('Fingerprint', () => {
   const positiveExamples = [

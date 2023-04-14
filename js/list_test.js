@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import List from './list.mjs';
+import List from './list.js';
 
 describe('List', () => {
   it('has no headers when empty', () => {

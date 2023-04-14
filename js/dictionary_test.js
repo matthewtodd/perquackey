@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import Dictionary from './dictionary.mjs'
+import Dictionary from './dictionary.js'
 
 describe('Dictionary', () => {
   const dictionary = new Dictionary([

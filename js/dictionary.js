@@ -1,4 +1,4 @@
-import Fingerprint from './fingerprint.mjs'
+import Fingerprint from './fingerprint.js'
 
 export default class Dictionary {
   constructor(words) {

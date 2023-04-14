@@ -1,3 +1,4 @@
 [tcr]
 	# https://nodejs.org/api/test.html
-	command = node --test --test-reporter=spec
+	# command = node --test --test-reporter=spec # not on node 16
+	command = node --test

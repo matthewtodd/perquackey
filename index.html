@@ -1,140 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Perquackey</title>
-    <style>
-      body {
-        margin: 0;
-      }
-      header, section, footer {
-        padding: 1rem;
-      }
-      header, section {
-        background-color: #fff;
-      }
-      h1 {
-        font-size: 2rem;
-        margin: 0;
-      }
-      form {
-        margin: 0;
-      }
-      input {
-        background-color: transparent;
-        border: 0;
-        box-sizing: border-box;
-        font-family: inherit;
-        font-size: 2rem;
-        margin: 0;
-        outline: 0;
-        padding: 0;
-        width: 100%;
-      }
-      table {
-        border-collapse: collapse;
-      }
-      td, th {
-        padding-right: 1em;
-        vertical-align: top;
-      }
-      footer {
-        background-color: #eee;
-        padding: 1em;
-      }
-    </style>
-    <script type="module">
-      import Dictionary from "./dictionary.mjs";
-      import List from "./list.mjs";
-      import ListView from "./list_view.mjs";
-      import words from "./words.mjs";
 
-      const dictionary = new Dictionary(words);
-      const $input = document.querySelector("input[name=letters]");
-      const listView = new ListView(document.querySelector("#words table"));
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perquackey</title>
+  <style>
+    body {
+      margin: 0;
+    }
 
-      window.addEventListener("load", (e) => {
-        const search = new URLSearchParams(e.target.location.search);
-        const letters = search.get("q") || '';
+    header,
+    section,
+    footer {
+      padding: 1rem;
+    }
 
-        $input.value = letters;
+    header,
+    section {
+      background-color: #fff;
+    }
 
-        e.target.dispatchEvent(
-          new CustomEvent("letters", {
-            bubbles: true,
-            detail: { letters: letters }
-          })
-        );
-      });
+    h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
 
-      $input.addEventListener("keyup", (e) => {
-        e.target.dispatchEvent(
-          new CustomEvent("letters", {
-            bubbles: true,
-            detail: { letters: e.target.value }
-          })
-        );
-      });
+    form {
+      margin: 0;
+    }
 
-      document.addEventListener("letters", (e) => {
-        const letters = e.detail.letters.toLowerCase().split('').sort().join('');
+    input {
+      background-color: transparent;
+      border: 0;
+      box-sizing: border-box;
+      font-family: inherit;
+      font-size: 2rem;
+      margin: 0;
+      outline: 0;
+      padding: 0;
+      width: 100%;
+    }
 
-        console.time("lookup");
-        const words = dictionary.lookup(letters);
-        console.timeEnd("lookup");
+    table {
+      border-collapse: collapse;
+    }
 
-        console.time("render");
-        listView.update(new List(words));
-        console.timeEnd("render");
+    td,
+    th {
+      padding-right: 1em;
+      vertical-align: top;
+    }
 
-        const search = (letters.length > 0) ? `?q=${letters}` : '';
-        history.replaceState(null, '', `${document.location.pathname}${search}`);
-      });
-    </script>
-  </head>
+    footer {
+      background-color: #eee;
+      padding: 1em;
+    }
+  </style>
+  <script type="module">
+    import Dictionary from "./dictionary.mjs";
+    import List from "./list.mjs";
+    import ListView from "./list_view.mjs";
+    import words from "./words.mjs";
 
-  <body>
-    <header>
-      <form>
-        <input name="letters"
-       autocomplete="off"
-        autocorrect="off"
-          autofocus="on"
-          maxlength="13"
-        placeholder="🎲 What did you roll?"
-         spellcheck="false"
-        />
-      </form>
-    </header>
+    const dictionary = new Dictionary(words);
+    const $input = document.querySelector("input[name=letters]");
+    const listView = new ListView(document.querySelector("#words table"));
 
-    <section id="words">
-      <table>
-        <thead><tr></tr></thead>
-        <tbody><tr></tr></tbody>
-      </table>
-    </section>
+    window.addEventListener("load", (e) => {
+      const search = new URLSearchParams(e.target.location.search);
+      const letters = search.get("q") || '';
 
-    <footer>
-      <p>
-        Type the letters you rolled to see what you could have spelled.
-      </p>
-      <p>
-        Examples:
-        <a href="?q=eehhhijjoopqt">eehhhijjoopqt</a>,
-        <a href="?q=aaddeginoprsw">aaddeginoprsw</a>
-      </p>
-      <p>
-        These words are taken from
-        <a href="http://en.wikipedia.org/wiki/Tournament_Word_List">TWL06, the official word list</a>
-        for Scrabble tournaments in North America. (You can
-        <a href="http://www.isc.ro/en/commands/lists.html">download this list</a>
-        from the Internet Scrabble Club.)
-      </p>
-      <p>
-        <a href="https://github.com/matthewtodd/perquackey">This code is on GitHub</a>.
-        Patches welcome!
-      </p>
-    </footer>
-  </body>
+      $input.value = letters;
+
+      e.target.dispatchEvent(
+        new CustomEvent("letters", {
+          bubbles: true,
+          detail: {letters: letters}
+        })
+      );
+    });
+
+    $input.addEventListener("keyup", (e) => {
+      e.target.dispatchEvent(
+        new CustomEvent("letters", {
+          bubbles: true,
+          detail: {letters: e.target.value}
+        })
+      );
+    });
+
+    document.addEventListener("letters", (e) => {
+      const letters = e.detail.letters.toLowerCase().split('').sort().join('');
+
+      console.time("lookup");
+      const words = dictionary.lookup(letters);
+      console.timeEnd("lookup");
+
+      console.time("render");
+      listView.update(new List(words));
+      console.timeEnd("render");
+
+      const search = (letters.length > 0) ? `?q=${letters}` : '';
+      history.replaceState(null, '', `${document.location.pathname}${search}`);
+    });
+  </script>
+</head>
+
+<body>
+  <header>
+    <form>
+      <input name="letters" autocomplete="off" autocorrect="off" autofocus="on" maxlength="13"
+        placeholder="🎲 What did you roll?" spellcheck="false" />
+    </form>
+  </header>
+
+  <section id="words">
+    <table>
+      <thead>
+        <tr></tr>
+      </thead>
+      <tbody>
+        <tr></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    <p>
+      Type the letters you rolled to see what you could have spelled.
+    </p>
+    <p>
+      Examples:
+      <a href="?q=eehhhijjoopqt">eehhhijjoopqt</a>,
+      <a href="?q=aaddeginoprsw">aaddeginoprsw</a>
+    </p>
+    <p>
+      These words are taken from
+      <a href="http://en.wikipedia.org/wiki/Tournament_Word_List">TWL06, the official word list</a>
+      for Scrabble tournaments in North America. (You can
+      <a href="http://www.isc.ro/en/commands/lists.html">download this list</a>
+      from the Internet Scrabble Club.)
+    </p>
+    <p>
+      <a href="https://github.com/matthewtodd/perquackey">This code is on GitHub</a>.
+      Patches welcome!
+    </p>
+  </footer>
+</body>
+
 </html>

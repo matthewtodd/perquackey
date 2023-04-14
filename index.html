@@ -5,106 +5,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Perquackey</title>
-  <style>
-    body {
-      margin: 0;
-    }
-
-    header,
-    section,
-    footer {
-      padding: 1rem;
-    }
-
-    header,
-    section {
-      background-color: #fff;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin: 0;
-    }
-
-    form {
-      margin: 0;
-    }
-
-    input {
-      background-color: transparent;
-      border: 0;
-      box-sizing: border-box;
-      font-family: inherit;
-      font-size: 2rem;
-      margin: 0;
-      outline: 0;
-      padding: 0;
-      width: 100%;
-    }
-
-    table {
-      border-collapse: collapse;
-    }
-
-    td,
-    th {
-      padding-right: 1em;
-      vertical-align: top;
-    }
-
-    footer {
-      background-color: #eee;
-      padding: 1em;
-    }
-  </style>
-  <script type="module">
-    import Dictionary from "./js/dictionary.js";
-    import List from "./js/list.js";
-    import ListView from "./js/list_view.js";
-    import words from "./js/words.js";
-
-    const dictionary = new Dictionary(words);
-    const $input = document.querySelector("input[name=letters]");
-    const listView = new ListView(document.querySelector("#words table"));
-
-    window.addEventListener("load", (e) => {
-      const search = new URLSearchParams(e.target.location.search);
-      const letters = search.get("q") || '';
-
-      $input.value = letters;
-
-      e.target.dispatchEvent(
-        new CustomEvent("letters", {
-          bubbles: true,
-          detail: {letters: letters}
-        })
-      );
-    });
-
-    $input.addEventListener("keyup", (e) => {
-      e.target.dispatchEvent(
-        new CustomEvent("letters", {
-          bubbles: true,
-          detail: {letters: e.target.value}
-        })
-      );
-    });
-
-    document.addEventListener("letters", (e) => {
-      const letters = e.detail.letters.toLowerCase().split('').sort().join('');
-
-      console.time("lookup");
-      const words = dictionary.lookup(letters);
-      console.timeEnd("lookup");
-
-      console.time("render");
-      listView.update(new List(words));
-      console.timeEnd("render");
-
-      const search = (letters.length > 0) ? `?q=${letters}` : '';
-      history.replaceState(null, '', `${document.location.pathname}${search}`);
-    });
-  </script>
+  <link rel="stylesheet" href="./css/screen.css" media="screen" />
+  <script type="module" src="./js/table_view.js"></script>
+  <script type="module" src="./js/app.js"></script>
 </head>
 
 <body>
@@ -125,6 +28,10 @@
       </tbody>
     </table>
   </section>
+
+  <!-- TODO: If I make this a self-closing tag, in Safari it gobbles up the footer. -->
+  <table-view id="tableView">
+  </table-view>
 
   <footer>
     <p>

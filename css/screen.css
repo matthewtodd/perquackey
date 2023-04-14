@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+}
+
+header,
+section,
+footer {
+  padding: 1rem;
+}
+
+header,
+section {
+  background-color: #fff;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+form {
+  margin: 0;
+}
+
+input {
+  background-color: transparent;
+  border: 0;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 2rem;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+  width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td,
+th {
+  padding-right: 1em;
+  vertical-align: top;
+}
+
+footer {
+  background-color: #eee;
+  padding: 1em;
+}

@@ -36,20 +36,3 @@
     --solarized-background: var(--solarized-base03);
   }
 }
-
-html {
-  background-color: var(--solarized-background);
-  color: var(--solarized-primary-content);
-  font-family: Menlo;
-  font-size: 12px;
-}
-
-h1 {
-  color: var(--solarized-red);
-  font-size: 1rem;
-  font-weight: normal;
-}
-
-h1::before {
-  content: "# ";
-}

@@ -6,7 +6,7 @@ import words from "./words.js";
 const dictionary = new Dictionary(words);
 const $input = document.querySelector("input[name=letters]");
 const listView = new ListView(document.querySelector("#words table"));
-const tableView = document.querySelector("#tableView");
+// const tableView = document.querySelector("#tableView");
 
 window.addEventListener("load", (e) => {
   const search = new URLSearchParams(e.target.location.search);
@@ -17,7 +17,7 @@ window.addEventListener("load", (e) => {
   e.target.dispatchEvent(
     new CustomEvent("letters", {
       bubbles: true,
-      detail: {letters: letters}
+      detail: { letters: letters }
     })
   );
 });
@@ -26,7 +26,7 @@ $input.addEventListener("keyup", (e) => {
   e.target.dispatchEvent(
     new CustomEvent("letters", {
       bubbles: true,
-      detail: {letters: e.target.value}
+      detail: { letters: e.target.value }
     })
   );
 });

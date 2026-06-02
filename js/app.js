@@ -6,7 +6,6 @@ import words from "./words.js";
 const dictionary = new Dictionary(words);
 const $input = document.querySelector("input[name=letters]");
 const listView = new ListView(document.querySelector("#words table"));
-// const tableView = document.querySelector("#tableView");
 
 window.addEventListener("load", (e) => {
   const search = new URLSearchParams(e.target.location.search);
@@ -41,10 +40,6 @@ document.addEventListener("letters", (e) => {
   console.time("render list");
   listView.update(new List(words));
   console.timeEnd("render list");
-
-  // console.time("render table");
-  // tableView.setAttribute("list", new List(words));
-  // console.timeEnd("render table");
 
   const search = (letters.length > 0) ? `?q=${letters}` : '';
   history.replaceState(null, '', `${document.location.pathname}${search}`);

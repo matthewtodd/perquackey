@@ -1,16 +1,32 @@
-body {
+:root {
+  color-scheme: light dark;
+
+  --background:            light-dark(#fdf6e3, #002b36);
+  --background-highlights: light-dark(#eee8d5, #073642);
+  --secondary:             light-dark(#93a1a1, #586e75);
+  --primary:               light-dark(#657b83, #839496);
+  --emphasized:            light-dark(#586e75, #93a1a1);
+
+  --yellow:  #b58900;
+  --orange:  #cb4b16;
+  --red:     #dc322f;
+  --magenta: #d33682;
+  --violet:  #6c71c4;
+  --blue:    #268bd2;
+  --cyan:    #2aa198;
+  --green:   #859900;
+}
+
+body, input {
   margin: 0;
+  background-color: var(--background);
+  color: var(--primary);
 }
 
 header,
 section,
 footer {
   padding: 1rem;
-}
-
-header,
-section {
-  background-color: #fff;
 }
 
 h1 {
@@ -34,6 +50,14 @@ input {
   width: 100%;
 }
 
+a {
+  color: var(--blue);
+}
+
+a:visited {
+  color: var(--violet);
+}
+
 table {
   border-collapse: collapse;
 }
@@ -45,6 +69,7 @@ th {
 }
 
 footer {
-  background-color: #eee;
+  background-color: var(--background-highlights);
+  color: var(--secondary);
   padding: 1em;
 }

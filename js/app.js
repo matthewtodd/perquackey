@@ -4,7 +4,7 @@ import ListView from "./list_view.js";
 import words from "./words.js";
 
 const dictionary = new Dictionary(words);
-const $input = document.querySelector("input[name=letters]");
+const $input = document.querySelector("input[name=q]");
 const listView = new ListView(document.querySelector("#words table"));
 
 window.addEventListener("load", (e) => {

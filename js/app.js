@@ -1,14 +1,7 @@
 import Dictionary from "./dictionary.js";
+import dictionary from "./dictionary.prebuilt.js";
 import List from "./list.js";
 import ListView from "./list_view.js";
-
-console.time("words");
-import words from "./words.js";
-console.timeEnd("words");
-
-console.time("dictionary");
-const dictionary = Dictionary.build(words);
-console.timeEnd("dictionary");
 
 const $input = document.querySelector("input[name=q]");
 const listView = new ListView(document.querySelector("#words table"));

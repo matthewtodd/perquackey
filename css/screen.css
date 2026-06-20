@@ -17,19 +17,16 @@
   --green:   #859900;
 }
 
-body, search {
+body {
   margin: 0;
   background-color: var(--background);
   color: var(--primary);
 }
 
-search,
-section,
-footer {
-  padding: 1rem;
-}
-
 search {
+  background-color: var(--background);
+  color: var(--primary);
+  padding: 1rem;
   position: sticky;
   top: 0;
 }
@@ -40,10 +37,36 @@ input[type=search] {
   border-radius: 12px;
   color: var(--primary);
   font-family: inherit;
-  font-size: 1.5rem;
+  font-size: 1.5em;
   outline: 0;
   padding: 0.5em;
   width: 100%;
+}
+
+section {
+  box-sizing: border-box;
+  overflow-x: scroll;
+  padding: 1rem;
+  scroll-padding: 1rem;
+  scroll-snap-type: x mandatory;
+  width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  padding-right: 1em;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  vertical-align: top;
+}
+
+footer {
+  background-color: var(--background-highlights);
+  color: var(--secondary);
+  padding: 1rem;
 }
 
 a {
@@ -54,18 +77,3 @@ a:visited {
   color: var(--violet);
 }
 
-table {
-  border-collapse: collapse;
-}
-
-td,
-th {
-  padding-right: 1em;
-  vertical-align: top;
-}
-
-footer {
-  background-color: var(--background-highlights);
-  color: var(--secondary);
-  padding: 1em;
-}

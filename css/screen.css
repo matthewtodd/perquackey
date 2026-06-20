@@ -17,32 +17,32 @@
   --green:   #859900;
 }
 
-body, header, input {
+body, search {
   margin: 0;
   background-color: var(--background);
   color: var(--primary);
 }
 
-header,
+search,
 section,
 footer {
   padding: 1rem;
 }
 
-header {
+search {
   position: sticky;
   top: 0;
 }
 
-input {
-  background-color: transparent;
-  border: 0;
-  box-sizing: border-box;
+input[type=search] {
+  background-color: var(--background);
+  border: 1px solid var(--background-highlights);
+  border-radius: 12px;
+  color: var(--primary);
   font-family: inherit;
-  font-size: 2rem;
-  margin: 0;
+  font-size: 1.5rem;
   outline: 0;
-  padding: 0;
+  padding: 0.5em;
   width: 100%;
 }
 

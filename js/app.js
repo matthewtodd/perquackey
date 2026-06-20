@@ -13,24 +13,22 @@ window.addEventListener("load", (e) => {
 
   $input.value = letters;
 
-  e.target.dispatchEvent(
+  $input.dispatchEvent(
     new CustomEvent("letters", {
-      bubbles: true,
       detail: { letters: letters }
     })
   );
 });
 
 $input.addEventListener("keyup", (e) => {
-  e.target.dispatchEvent(
+  $input.dispatchEvent(
     new CustomEvent("letters", {
-      bubbles: true,
       detail: { letters: e.target.value }
     })
   );
 });
 
-document.addEventListener("letters", (e) => {
+$input.addEventListener("letters", (e) => {
   const letters = e.detail.letters.toLowerCase().split('').sort().join('');
 
   console.time("lookup");

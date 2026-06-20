@@ -18,33 +18,28 @@
 }
 
 body {
-  margin: 0;
   background-color: var(--background);
   color: var(--primary);
+  margin: 0;
 }
 
 search {
   background-color: var(--background);
   color: var(--primary);
   padding: 1rem;
-  position: sticky;
-  top: 0;
 }
 
 input[type=search] {
-  background-color: var(--background);
-  border: 1px solid var(--background-highlights);
-  border-radius: 12px;
-  color: var(--primary);
   font-family: inherit;
   font-size: 1.5em;
   outline: 0;
-  padding: 0.5em;
   width: 100%;
 }
 
 section {
+  background-color: var(--background);
   box-sizing: border-box;
+  color: var(--primary);
   overflow-x: scroll;
   padding: 1rem;
   scroll-padding: 1rem;

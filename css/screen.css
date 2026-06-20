@@ -20,7 +20,8 @@
 body {
   background-color: var(--background);
   color: var(--primary);
-  margin: 0;
+  margin: 0 auto;
+  max-width: 38rem;
 }
 
 search {
@@ -64,8 +65,8 @@ th, td {
 }
 
 footer {
-  background-color: var(--background-highlights);
-  color: var(--secondary);
+  background-color: var(--background);
+  color: var(--primary);
   padding: 1rem;
 }
 

@@ -13,11 +13,11 @@ export default class Dictionary {
     return dictionary;
   }
 
-  static lookup(words, letters) {
+  static lookup(dictionary, letters) {
     const mask = Fingerprint.build(letters);
 
     // TODO explore generator functions?
-    return Object.entries(words)
+    return Object.entries(dictionary)
       .filter(([_, fingerprint]) => Fingerprint.includes(mask, fingerprint))
       .map(([word, _]) => word);
   }

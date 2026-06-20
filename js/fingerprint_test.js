@@ -12,7 +12,7 @@ describe('Fingerprint', () => {
 
   for (const example of positiveExamples) {
     it(`${example[0]} includes ${example[1]}`, () => {
-      assert(new Fingerprint(example[0]).includes(new Fingerprint(example[1])));
+      assert(Fingerprint.includes(Fingerprint.build(example[0]), Fingerprint.build(example[1])));
     });
   }
 
@@ -24,7 +24,7 @@ describe('Fingerprint', () => {
 
   for (const example of negativeExamples) {
     it(`${example[0]} does not include ${example[1]}`, () => {
-      assert(!new Fingerprint(example[0]).includes(new Fingerprint(example[1])));
+      assert(!Fingerprint.includes(Fingerprint.build(example[0]), Fingerprint.build(example[1])));
     });
   }
 });

@@ -7,7 +7,7 @@ import words from "./words.js";
 console.timeEnd("words");
 
 console.time("dictionary");
-const dictionary = new Dictionary(words);
+const dictionary = Dictionary.build(words);
 console.timeEnd("dictionary");
 
 const $input = document.querySelector("input[name=q]");
@@ -38,7 +38,7 @@ $input.addEventListener("letters", (e) => {
   const letters = e.detail.letters.toLowerCase().split('').sort().join('');
 
   console.time("lookup");
-  const words = dictionary.lookup(letters);
+  const words = Dictionary.lookup(dictionary, letters);
   console.timeEnd("lookup");
 
   console.time("render list");

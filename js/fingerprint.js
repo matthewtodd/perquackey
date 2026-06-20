@@ -1,8 +1,8 @@
 const base = 'a'.charCodeAt(0);
 
 export default class Fingerprint {
-  constructor(string) {
-    this.values = [];
+  static build(string) {
+    const values = [];
 
     var string = string.toLowerCase();
 
@@ -11,27 +11,29 @@ export default class Fingerprint {
 
       var level = 0;
       while (true) {
-        if (this.values.length == level) {
-          this.values[level] = 0;
+        if (values.length == level) {
+          values[level] = 0;
         }
 
-        if ((this.values[level] & bit) == 0) {
-          this.values[level] |= bit;
+        if ((values[level] & bit) == 0) {
+          values[level] |= bit;
           break;
         }
 
         level++;
       }
     }
+
+    return values;
   }
 
-  includes(other) {
-    for (var i = 0; i < other.values.length; i++) {
-      if (this.values.length == i) {
+  static includes(mask, other) {
+    for (var i = 0; i < other.length; i++) {
+      if (mask.length == i) {
         return false;
       }
 
-      if ((this.values[i] | other.values[i]) != this.values[i]) {
+      if ((mask[i] | other[i]) != mask[i]) {
         return false
       }
     }

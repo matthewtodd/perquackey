@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 import Dictionary from './dictionary.js'
 
 describe('Dictionary', () => {
-  const dictionary = new Dictionary([
+  const dictionary = Dictionary.build([
     'act',
     'bat',
     'cab',
@@ -13,11 +13,11 @@ describe('Dictionary', () => {
 
   describe('lookup', () => {
     it('is empty with empty letters', () => {
-      assert.deepEqual(dictionary.lookup(''), [])
+      assert.deepEqual(Dictionary.lookup(dictionary, ''), [])
     })
 
     it('returns words that can be spelled with the given letters', () => {
-      assert.deepEqual(dictionary.lookup('act'), ['act', 'cat'])
+      assert.deepEqual(Dictionary.lookup(dictionary, 'act'), ['act', 'cat'])
     })
   });
 });

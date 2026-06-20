@@ -1,22 +1,24 @@
 import Fingerprint from './fingerprint.js'
 
 export default class Dictionary {
-  constructor(words) {
+  static build(words) {
     // Indexing by fingerprint doesn't help much: in our word list, there are
     // 135,042 distinct words with 117,881 distinct fingerprints.
-    this.words = {};
+    const dictionary = {};
 
     words.forEach((word) => {
-      this.words[word] = new Fingerprint(word);
+      dictionary[word] = Fingerprint.build(word);
     });
+
+    return dictionary;
   }
 
-  lookup(letters) {
-    const mask = new Fingerprint(letters);
+  static lookup(words, letters) {
+    const mask = Fingerprint.build(letters);
 
     // TODO explore generator functions?
-    return Object.entries(this.words)
-      .filter(([_, fingerprint]) => mask.includes(fingerprint))
+    return Object.entries(words)
+      .filter(([_, fingerprint]) => Fingerprint.includes(mask, fingerprint))
       .map(([word, _]) => word);
   }
 }
